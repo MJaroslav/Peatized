@@ -1,0 +1,36 @@
+itemGroup.peatized=Peatized
+
+tile.peatized.bogDirt.name=Bog dirt
+tile.peatized.bogDirt.dry.name=Dry bog dirt
+tile.peatized.bogDirt.error.name=Bog dirt (error)
+tile.peatized.compressor.0.name=Compressor
+tile.peatized.compressor.1.name=Flux compressor
+tile.peatized.peat.0.name=Peat bricks
+tile.peatized.peat.1.name=Chiseled peat bricks
+tile.peatized.peatSlab.0.name=Peat bricks slab
+tile.peatized.peatStairs.name=Peat bricks stairs
+
+item.peatized.resource.0.name=Peat ball
+item.peatized.resource.1.name=Peat brick
+item.peatized.resource.2.name=Peat plate
+
+tooltip.bogDirt.biome=Biome bonus: {biomeBonus}
+tooltip.bogDirt.humidity=Humidity: {value}
+tooltip.bogDirt.humidity.dry=Dry
+tooltip.bogDirt.humidity.error=Error
+tooltip.bogDirt.humidity.percent={percent}%
+tooltip.bogDirt.humidity.wet=Wet
+tooltip.bogDirt.rain=Rain bonus: {rainBonus}
+tooltip.bogDirt.total=Total bonus: {totalBonus}
+tooltip.bogDirt.water.0=Water count: {waterCount}/{waterMax} (Bonus: {waterBonus}/{waterMaxBonus})
+tooltip.bogDirt.water.1=Water affect up to: {waterReqMax} (Steps: {waterSteps}/{waterStepsMax})
+tooltip.bogDirt.water.2=Water on step: {waterOneStep} (Step Bonus: {waterStepBonus})
+tooltip.error.meta=Bad meta!
+
+container.compressor.0=Compressor
+container.compressor.1=Flux compressor
+
+peatized.commands.compressorreload.done=Compressor recipes reloaded!
+
+nei.recipe.compressor=Compressing
+nei.recipe.compressor.auto=Only auto: 

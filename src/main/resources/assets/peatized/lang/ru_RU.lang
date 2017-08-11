@@ -1,0 +1,42 @@
+itemGroup.peatized=Peatized
+
+tile.peatized.bogDirt.name=Болотная земля
+tile.peatized.bogDirt.dry.name=Сухая болотная земля
+tile.peatized.bogDirt.error.name=Болотная земля (ошибка)
+tile.peatized.compressor.0.name=Компрессор
+tile.peatized.compressor.1.name=Флаксовый компрессор
+tile.peatized.peat.0.name=Торфяные кирпичи
+tile.peatized.peat.1.name=Резные торфяные кирпичи
+tile.peatized.peatSlab.0.name=Плита из торфяных кирпичей
+tile.peatized.peatStairs.name=Ступеньки из торфяных кирпичей
+
+item.peatized.resource.0.name=Комок торфа
+item.peatized.resource.1.name=Брикет торфа
+item.peatized.resource.2.name=Пластина торфа
+
+tooltip.bogDirt.biome=Бонус биома: {biomeBonus}
+tooltip.bogDirt.humidity=Влажность: {value}
+tooltip.bogDirt.humidity.dry=Сухой
+tooltip.bogDirt.humidity.error=Ошибка
+tooltip.bogDirt.humidity.percent={percent}%
+tooltip.bogDirt.humidity.wet=Влажный
+tooltip.bogDirt.rain=Бонус дождя: {rainBonus}
+tooltip.bogDirt.total=Общий бонус: {totalBonus}
+tooltip.bogDirt.water.0=Количество воды: {waterCount}/{waterMax} (Бонус: {waterBonus}/{waterMaxBonus})
+tooltip.bogDirt.water.1=Вода влияет до: {waterReqMax} (Шаги: {waterSteps}/{waterStepsMax})
+tooltip.bogDirt.water.2=Воды на шаг: {waterOneStep} (Бонус шага: {waterStepBonus})
+tooltip.error.meta=Плохой meta id!
+
+container.compressor=Компрессор
+container.compressor.rf=Флаксовый компрессор
+
+container.compressor.ready=§lГотов&n&n§r§i§7Для работы устройства&n§r§7§oнужно прыгать на нажимной&n§r§7§oплите.§r
+container.compressor.noPlate=§lНет плиты&n&n§r§7§oПожалуйста, установите каменную&n§r§7§oнажимную плиту на компрессор.§r
+container.compressor.noRecipe=§lНет рецепта&n&n§r§7§oСлишком мало ингридиентов,&n§r§7§oили вовсе нельзя создать чтолибо.§r
+container.compressor.info=§lИнформация&n&n§r§7§oСлужит для сжатия предметов,&n§7§oпрыгая на нажимной плите.&n§7§oНе требует энергии. Для&n§7§oкаждого рецепта свое количество&n§7§oпрыжков.§r
+container.compressor.inventoryFull=§lИнвентарь полон!&n&n§r§7§oПожалуйста, освободите слот выхода.§r
+
+peatized.commands.compressorreload.done=Рецепты компрессора перезагружены!
+
+nei.recipe.compressor=Сжатие
+nei.recipe.compressor.auto=Только авто: 

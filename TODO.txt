@@ -1,0 +1,5 @@
+Lignite
+- Ore
+- Generation
+- Usage
+- Craft (from peat)

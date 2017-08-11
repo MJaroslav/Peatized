@@ -1,0 +1,16 @@
+[
+{
+  "modid": "peatized",
+  "name": "Peatized",
+  "description": "The modification adds peat and its application",
+  "version": "1.7.10-1",
+  "mcversion": "1.7.10",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["MJaroslav"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
