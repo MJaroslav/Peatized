@@ -16,7 +16,7 @@ public class TileCompressorRenderer extends TileEntitySpecialRenderer {
 	public ResourceLocation texture = new ResourceLocation(PeatizedMod.MODID + ":textures/blocks/compressor.png");
 	public ResourceLocation textureModel = new ResourceLocation(
 			PeatizedMod.MODID + ":textures/entity/compressor/compressor.png");
-	public ModelCompressor model = new ModelCompressor(0.0625F);
+	public static ModelCompressor model = new ModelCompressor(0.0625F);
 
 	public TileCompressorRenderer(String resourceId, String blockTexture) {
 		texture = new ResourceLocation(resourceId + ":textures/blocks/" + blockTexture + ".png");
