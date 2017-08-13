@@ -37,9 +37,10 @@ public class PeatizedWorldGenerator implements IWorldGenerator {
 	public void generateSurface(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,
 			IChunkProvider chunkProvider) {
 		if (PeatizedConfig.generateBogDirt)
-			bogDirt.runGenerator(world, random, chunkX, chunkZ, 7, 50, 70);
-		if (random.nextInt(100) < 5)
-			peathouse.runGenerator(world, random, chunkX, chunkZ, 1);
+			bogDirt.runGenerator(world, random, chunkX, chunkZ, 1);
+		if (PeatizedConfig.peathousePercentChance >= 100 || (PeatizedConfig.peathousePercentChance != 0
+				&& random.nextInt(100) < PeatizedConfig.peathousePercentChance))
+			peathouse.runGenerator(world, random, chunkX, chunkZ);
 	}
 
 	public void generateNether(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,

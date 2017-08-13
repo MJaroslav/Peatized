@@ -1,6 +1,9 @@
 package mjaroslav.mcmods.peatized.client;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -25,7 +28,11 @@ public class PeatizedClientProxy extends PeatizedCommonProxy {
 	}
 
 	@Override
-	public void init() {
+	public void preInit(FMLPreInitializationEvent event) {
+	}
+
+	@Override
+	public void init(FMLInitializationEvent event) {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileCompressor.class,
 				new TileCompressorRenderer(PeatizedMod.MODID, "compressor"));
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(PeatizedBlocks.compressor),
@@ -34,5 +41,9 @@ public class PeatizedClientProxy extends PeatizedCommonProxy {
 				new TileCompressorRenderer(PeatizedMod.MODID, "compressor_rf"));
 		VillagerRegistry.instance().registerVillagerSkin(PeatizedConfig.villagerId,
 				new ResourceLocation(PeatizedMod.MODID + ":textures/entity/villager/peatman.png"));
+	}
+
+	@Override
+	public void postInit(FMLPostInitializationEvent event) {
 	}
 }

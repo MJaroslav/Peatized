@@ -1,13 +1,28 @@
 package mjaroslav.mcmods.peatized.common.init;
 
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
+import mjaroslav.mcmods.peatized.common.utils.PeatizedFuelHandler;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class PeatizedCrafts {
-	public static void init() {
+public class PeatizedCrafts implements IInitBase {
+	@Override
+	public void preInit(FMLPreInitializationEvent event) {
+	}
+
+	@Override
+	public void init(FMLInitializationEvent event) {
+	}
+
+	@Override
+	public void postInit(FMLPostInitializationEvent event) {
+		GameRegistry.registerFuelHandler(new PeatizedFuelHandler());
 		GameRegistry.addShapelessRecipe(new ItemStack(Blocks.stone_slab, 2, 0),
 				new ItemStack(Blocks.double_stone_slab, 1, 8));
 		GameRegistry.addShapelessRecipe(new ItemStack(Blocks.stone_slab, 2, 1),
@@ -26,5 +41,6 @@ public class PeatizedCrafts {
 				new ItemStack(PeatizedBlocks.peat, 1, 0));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(PeatizedBlocks.peat, 8, 1), "BBB", "BPB", "BBB", 'B',
 				new ItemStack(Blocks.stonebrick, 1, 3), 'P', "platePeat"));
+		CompressorRecipes.readFromConfig();
 	}
 }

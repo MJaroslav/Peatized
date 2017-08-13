@@ -1,5 +1,3 @@
-//Schematic to java Structure by jajo_11 | inspired by "MITHION'S .SCHEMATIC TO JAVA CONVERTINGTOOL"
-
 package mjaroslav.mcmods.peatized.common.world;
 
 import java.util.Random;
@@ -31,36 +29,24 @@ public class PeathouseGenerator extends WorldGenerator {
 				return false;
 			}
 			if (checkBlock == i) {
-				//TODO: remove it
-				System.out.println("Peathouse at " + x + " " + y + " " + z);
 				return true;
 			} else if (checkBlock == Blocks.snow_layer && blockBelow == i) {
-				//TODO: remove it
-				System.out.println("Peathouse at " + x + " " + y + " " + z);
 				return true;
 			} else if (checkBlock.getMaterial() == Material.plants && blockBelow == i) {
-				//TODO: remove it
-				System.out.println("Peathouse at " + x + " " + y + " " + z);
 				return true;
 			}
 		}
-		//TODO: remove it
-		System.out.println("Peathouse will be at " + x + " " + y + " " + z);
-		for(int yy = 1; yy<100; yy++)
-			world.setBlock(x, yy, z, Blocks.glass);
 		return false;
 	}
 
-	public void runGenerator(World world, Random rand, int chunkX, int chunkZ, int chancesToSpawn) {
-		for (int i = 0; i < chancesToSpawn; i++) {
-			int x = chunkX * 16 + rand.nextInt(16);
-			int z = chunkZ * 16 + rand.nextInt(16);
-			int y = world.getHeightValue(x, z);
-			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-			if (biome.temperature == PeatizedWorldGenerator.temperatureSwampland
-					&& biome.rainfall == PeatizedWorldGenerator.rainfallSwampland)
-				generate(world, rand, x, y, z);
-		}
+	public void runGenerator(World world, Random rand, int chunkX, int chunkZ) {
+		int x = chunkX * 16 + rand.nextInt(16) + 8;
+		int z = chunkZ * 16 + rand.nextInt(16) + 8;
+		int y = world.getTopSolidOrLiquidBlock(x, z);
+		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+		if (biome.temperature == PeatizedWorldGenerator.temperatureSwampland
+				&& biome.rainfall == PeatizedWorldGenerator.rainfallSwampland)
+			generate(world, rand, x, y, z);
 	}
 
 	@Override
@@ -2662,7 +2648,7 @@ public class PeathouseGenerator extends WorldGenerator {
 
 	public boolean generateVillager(World world, Random rand, int x, int y, int z) {
 		EntityVillager villager = new EntityVillager(world, PeatizedConfig.villagerId);
-		villager.setPositionAndUpdate(x, y, z);
+		villager.setPositionAndUpdate(x + 0.5, y, z + 0.5);
 		world.spawnEntityInWorld(villager);
 		return true;
 	}

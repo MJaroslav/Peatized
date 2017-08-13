@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import com.google.gson.annotations.SerializedName;
 
 import mjaroslav.mcmods.peatized.PeatizedMod;
+import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
 import mjaroslav.mcmods.peatized.common.init.PeatizedItems;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes.CompressorRecipeJSON.LiteItemStackJSON;
 import mjaroslav.mcmods.peatized.common.utils.JSONReader;
@@ -36,7 +37,7 @@ public class CompressorRecipes {
 
 	private static JSONReader<CompressorRecipeJSON[]> reader = new JSONReader<CompressorRecipeJSON[]>(
 			new CompressorRecipeJSON[] {}, CompressorRecipeJSON[].class,
-			new File(PeatizedMod.configFolderPath + "/" + PeatizedMod.MODID + "_compressor_recipes.json"), true);
+			new File(PeatizedConfig.configFolder + "/" + PeatizedMod.MODID + "_compressor_recipes.json"), true);
 
 	private static CompressorRecipeJSON[] defaultRecipes = new CompressorRecipeJSON[] {};
 
@@ -89,7 +90,7 @@ public class CompressorRecipes {
 	}
 
 	public static void readFromConfig() {
-		reader.setFile(new File(PeatizedMod.configFolderPath + "/" + PeatizedMod.MODID + "_compressor_recipes.json"));
+		reader.setFile(new File(PeatizedConfig.configFolder + "/" + PeatizedMod.MODID + "_compressor_recipes.json"));
 		setNewDefaults();
 		reader.init();
 		Map<ItemStack, CompressorRecipe> recipeList = new HashMap();

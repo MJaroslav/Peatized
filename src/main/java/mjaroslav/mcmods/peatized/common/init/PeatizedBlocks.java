@@ -1,5 +1,8 @@
 package mjaroslav.mcmods.peatized.common.init;
 
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mjaroslav.mcmods.peatized.PeatizedMod;
 import mjaroslav.mcmods.peatized.common.block.BlockBogDirt;
@@ -16,7 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 
-public class PeatizedBlocks {
+public class PeatizedBlocks implements IInitBase {
 	public static Block bogDirt = new BlockBogDirt(Material.ground, false).setCreativeTab(PeatizedMod.tab)
 			.setBlockName("peatized.bogDirt").setHardness(0.5F).setStepSound(Block.soundTypeGravel);
 	public static Block bogDirtGenerated = new BlockBogDirt(Material.ground, true).setCreativeTab(PeatizedMod.tab)
@@ -32,7 +35,8 @@ public class PeatizedBlocks {
 	public static Block peatStairs = new BlockPeatizedStairs(peat, 0).setBlockName("peatized.peatStairs")
 			.setStepSound(Block.soundTypeStone);
 
-	public static void init() {
+	@Override
+	public void preInit(FMLPreInitializationEvent event) {
 		GameRegistry.registerBlock(bogDirt, ItemBlockBogDirt.class, "bog_dirt");
 		GameRegistry.registerBlock(bogDirtGenerated, ItemBlockBogDirt.class, "bog_dirt_generated");
 		Blocks.fire.setFireInfo(bogDirt, 60, 20);
@@ -44,5 +48,13 @@ public class PeatizedBlocks {
 		GameRegistry.registerBlock(peatSlab, ItemPeatSlab.class, "peat_slab");
 		GameRegistry.registerBlock(peatSlabDouble, ItemPeatSlab.class, "peat_slab_double");
 		GameRegistry.registerBlock(peatStairs, "peat_stairs");
+	}
+
+	@Override
+	public void init(FMLInitializationEvent event) {
+	}
+
+	@Override
+	public void postInit(FMLPostInitializationEvent event) {
 	}
 }
