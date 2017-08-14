@@ -7,7 +7,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import mjaroslav.mcmods.fishingcontroller.api.FishingControllerApi;
 import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
-import mjaroslav.mcmods.peatized.common.world.PeatizedWorldGenerator;
+import mjaroslav.mcmods.peatized.common.world.BlockSludgeGenerator;
+import mjaroslav.mcmods.peatized.common.world.PeathouseGenerator;
 import mjaroslav.mcmods.peatized.common.world.VillagePeatmanManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -28,7 +29,7 @@ public class PeatizedWorldGen implements IInitBase {
 			new WeightedRandomChestContent(Item.getItemFromBlock(PeatizedBlocks.peat), 0, 1, 10, 5),
 			new WeightedRandomChestContent(Item.getItemFromBlock(PeatizedBlocks.peat), 1, 1, 10, 3) };
 	public static ChestGenHooks peathouseChestHook = new ChestGenHooks(PEATHOUSE_CHEST, peathouseLoot, 3, 9);
-
+	
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 	}
@@ -38,7 +39,8 @@ public class PeatizedWorldGen implements IInitBase {
 		VillagePeatmanManager peatman = new VillagePeatmanManager();
 		VillagerRegistry.instance().registerVillagerId(PeatizedConfig.villagerId);
 		VillagerRegistry.instance().registerVillageTradeHandler(PeatizedConfig.villagerId, peatman);
-		GameRegistry.registerWorldGenerator(new PeatizedWorldGenerator(), 0);
+		GameRegistry.registerWorldGenerator(new BlockSludgeGenerator(PeatizedBlocks.bogDirtGenerated, 0, 5), 0);
+		GameRegistry.registerWorldGenerator(new PeathouseGenerator(), 1);
 	}
 
 	@Override

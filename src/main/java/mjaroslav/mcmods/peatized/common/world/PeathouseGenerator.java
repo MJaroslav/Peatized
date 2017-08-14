@@ -1,5 +1,6 @@
 package mjaroslav.mcmods.peatized.common.world;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
@@ -12,65 +13,135 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.BiomeDictionary;
 
-public class PeathouseGenerator extends WorldGenerator {
-	protected Block[] getValidSpawnBlocks() {
-		return new Block[] { Blocks.grass, Blocks.stone, PeatizedBlocks.bogDirtGenerated };
+public class PeathouseGenerator extends BaseWorldGenerator {
+	public Block[] validSpawnBlocks = new Block[] { Blocks.grass, Blocks.stone, PeatizedBlocks.bogDirtGenerated };
+	private int rotation;
+
+	@Override
+	public boolean canGenerate(World world, Random rand, int x, int y, int z) {
+		if (!(PeatizedConfig.peathousePercentChance >= 100 || (PeatizedConfig.peathousePercentChance != 0
+				&& rand.nextInt(200) < PeatizedConfig.peathousePercentChance)))
+			return false;
+		if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(x, z), BiomeDictionary.Type.SWAMP))
+			return false;
+		return true;
 	}
 
-	public boolean locationIsValidSpawn(World world, int x, int y, int z) {
-		Block checkBlock = world.getBlock(x, y - 1, z);
-		Block blockAbove = world.getBlock(x, y, z);
-		Block blockBelow = world.getBlock(x, y - 2, z);
-		for (Block i : getValidSpawnBlocks()) {
-			if (blockAbove != Blocks.air) {
-				return false;
-			}
-			if (checkBlock == i) {
-				return true;
-			} else if (checkBlock == Blocks.snow_layer && blockBelow == i) {
-				return true;
-			} else if (checkBlock.getMaterial() == Material.plants && blockBelow == i) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void runGenerator(World world, Random rand, int chunkX, int chunkZ) {
+	@Override
+	public int[] getCoords(World world, Random rand, int chunkX, int chunkZ) {
 		int x = chunkX * 16 + rand.nextInt(16) + 8;
 		int z = chunkZ * 16 + rand.nextInt(16) + 8;
-		int y = world.getTopSolidOrLiquidBlock(x, z);
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		if (biome.temperature == PeatizedWorldGenerator.temperatureSwampland
-				&& biome.rainfall == PeatizedWorldGenerator.rainfallSwampland)
-			generate(world, rand, x, y, z);
+		int y = 63;
+		while (world.getBlock(x, y, z) != Blocks.air)
+			y++;
+		this.rotation = rand.nextInt(4);
+		return new int[] { x, y, z };
+	}
+
+	public boolean canGenerateLocal(World world, int x, int y, int z, int x1, int z1) {
+		ArrayList<Integer> hs = new ArrayList<Integer>();
+		int id = 0;
+		for (int xx = x; xx < x1 + 1; xx++)
+			for (int zz = z; zz < z1 + 1; zz++) {
+				if (world.getBlock(x, y-1, z).getMaterial() != Material.water)
+					return false;
+			}
+		return true;
 	}
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
-		int i = rand.nextInt(4);
-		if (i == 0) {
+		if (this.rotation == 0) {
 			return generateR0(world, rand, x, y, z);
 		}
-		if (i == 1) {
+		if (this.rotation == 1) {
 			return generateR1(world, rand, x, y, z);
 		}
-		if (i == 2) {
+		if (this.rotation == 2) {
 			return generateR2(world, rand, x, y, z);
 		}
-		if (i == 3) {
+		if (this.rotation == 3) {
 			return generateR3(world, rand, x, y, z);
 		}
 		return false;
 	}
 
 	public boolean generateR0(World world, Random rand, int x, int y, int z) {
-		if (!locationIsValidSpawn(world, x + 5, y, z + 3)) {
+		if (!canGenerateLocal(world, x, y, z, x + 9, z + 6)) {
 			return false;
 		}
+		world.setBlock(x + 0, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 6, Blocks.cobblestone, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 2, y + 0, z + 0, Blocks.air, 0, 3);
@@ -82,7 +153,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 8, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 9, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 1, Blocks.air, 0, 3);
-		world.setBlock(x + 1, y + 0, z + 1, Blocks.log, 0, 3);
+		world.setBlock(x + 1, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 2, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 3, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 4, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
@@ -122,7 +193,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 8, y + 0, z + 4, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 9, y + 0, z + 4, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 5, Blocks.air, 0, 3);
-		world.setBlock(x + 1, y + 0, z + 5, Blocks.log, 0, 3);
+		world.setBlock(x + 1, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 2, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 3, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 4, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
@@ -137,7 +208,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 3, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 4, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 6, Blocks.air, 0, 3);
-		world.setBlock(x + 6, y + 0, z + 6, PeatizedBlocks.peatStairs, 3, 3);
+		world.setBlock(x + 6, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 7, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 8, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 9, y + 0, z + 6, Blocks.air, 0, 3);
@@ -692,10 +763,11 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 7, y + 8, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 8, y + 8, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 9, y + 8, z + 6, Blocks.air, 0, 3);
-		return generateR02last(world, rand, x, y, z);
+		return generateR02Last(world, rand, x, y, z);
+
 	}
 
-	public boolean generateR02last(World world, Random rand, int x, int y, int z) {
+	public boolean generateR02Last(World world, Random rand, int x, int y, int z) {
 		world.setBlock(x + 5, y + 2, z + 4, Blocks.torch, 4, 3);
 		world.setBlock(x + 5, y + 2, z + 6, Blocks.torch, 3, 3);
 		world.setBlock(x + 6, y + 1, z + 5, Blocks.wooden_door, 3, 3);
@@ -711,9 +783,79 @@ public class PeathouseGenerator extends WorldGenerator {
 	}
 
 	public boolean generateR1(World world, Random rand, int x, int y, int z) {
-		if (!locationIsValidSpawn(world, x + 3, y, z + 5)) {
+		if (!canGenerateLocal(world, x, y, z, x + 6, z + 9)) {
 			return false;
 		}
+		world.setBlock(x + 0, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 0, Blocks.cobblestone, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 9, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 8, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 7, Blocks.air, 0, 3);
@@ -725,7 +867,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 0, y + 0, z + 1, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 9, Blocks.air, 0, 3);
-		world.setBlock(x + 1, y + 0, z + 8, Blocks.log, 0, 3);
+		world.setBlock(x + 1, y + 0, z + 8, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 7, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 6, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
@@ -765,7 +907,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 4, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 4, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 9, Blocks.air, 0, 3);
-		world.setBlock(x + 5, y + 0, z + 8, Blocks.log, 0, 3);
+		world.setBlock(x + 5, y + 0, z + 8, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 7, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 6, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
@@ -780,7 +922,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 6, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 5, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 4, Blocks.air, 0, 3);
-		world.setBlock(x + 6, y + 0, z + 3, PeatizedBlocks.peatStairs, 1, 3);
+		world.setBlock(x + 6, y + 0, z + 3, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 2, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 1, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 0, Blocks.air, 0, 3);
@@ -1335,10 +1477,11 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 6, y + 8, z + 2, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 8, z + 1, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 8, z + 0, Blocks.air, 0, 3);
-		return generateR13last(world, rand, x, y, z);
+		return generateR13Last(world, rand, x, y, z);
+
 	}
 
-	public boolean generateR13last(World world, Random rand, int x, int y, int z) {
+	public boolean generateR13Last(World world, Random rand, int x, int y, int z) {
 		world.setBlock(x + 4, y + 2, z + 4, Blocks.torch, 2, 3);
 		world.setBlock(x + 6, y + 2, z + 4, Blocks.torch, 1, 3);
 		world.setBlock(x + 5, y + 1, z + 3, Blocks.wooden_door, 2, 3);
@@ -1354,9 +1497,79 @@ public class PeathouseGenerator extends WorldGenerator {
 	}
 
 	public boolean generateR2(World world, Random rand, int x, int y, int z) {
-		if (!locationIsValidSpawn(world, x + 5, y, z + 3)) {
+		if (!canGenerateLocal(world, x, y, z, x + 9, z + 6)) {
 			return false;
 		}
+		world.setBlock(x + 9, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 9, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 8, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 7, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 0, Blocks.cobblestone, 0, 3);
 		world.setBlock(x + 9, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 8, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 7, y + 0, z + 6, Blocks.air, 0, 3);
@@ -1368,7 +1581,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 1, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 9, y + 0, z + 5, Blocks.air, 0, 3);
-		world.setBlock(x + 8, y + 0, z + 5, Blocks.log, 0, 3);
+		world.setBlock(x + 8, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 7, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 5, PeatizedBlocks.peat, 0, 3);
@@ -1408,7 +1621,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 1, y + 0, z + 2, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 2, Blocks.air, 0, 3);
 		world.setBlock(x + 9, y + 0, z + 1, Blocks.air, 0, 3);
-		world.setBlock(x + 8, y + 0, z + 1, Blocks.log, 0, 3);
+		world.setBlock(x + 8, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 7, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
@@ -1423,7 +1636,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 6, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 4, y + 0, z + 0, Blocks.air, 0, 3);
-		world.setBlock(x + 3, y + 0, z + 0, PeatizedBlocks.peatStairs, 2, 3);
+		world.setBlock(x + 3, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 2, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 0, Blocks.air, 0, 3);
@@ -1978,10 +2191,11 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 2, y + 8, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 1, y + 8, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 8, z + 0, Blocks.air, 0, 3);
-		return generateR24last(world, rand, x, y, z);
+		return generateR24Last(world, rand, x, y, z);
+
 	}
 
-	public boolean generateR24last(World world, Random rand, int x, int y, int z) {
+	public boolean generateR24Last(World world, Random rand, int x, int y, int z) {
 		world.setBlock(x + 4, y + 2, z + 2, Blocks.torch, 3, 3);
 		world.setBlock(x + 4, y + 2, z + 0, Blocks.torch, 4, 3);
 		world.setBlock(x + 3, y + 1, z + 1, Blocks.wooden_door, 1, 3);
@@ -1996,9 +2210,79 @@ public class PeathouseGenerator extends WorldGenerator {
 	}
 
 	public boolean generateR3(World world, Random rand, int x, int y, int z) {
-		if (!locationIsValidSpawn(world, x + 3, y, z + 5)) {
+		if (!canGenerateLocal(world, x, y, z, x + 6, z + 9)) {
 			return false;
 		}
+		world.setBlock(x + 6, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 6, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 5, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 4, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 3, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 2, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 1, y + -1, z + 9, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 0, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 1, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 2, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 3, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 4, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 5, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 6, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 7, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 8, Blocks.cobblestone, 0, 3);
+		world.setBlock(x + 0, y + -1, z + 9, Blocks.cobblestone, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 0, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 1, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 2, Blocks.air, 0, 3);
@@ -2010,7 +2294,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 6, y + 0, z + 8, Blocks.air, 0, 3);
 		world.setBlock(x + 6, y + 0, z + 9, Blocks.air, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 0, Blocks.air, 0, 3);
-		world.setBlock(x + 5, y + 0, z + 1, Blocks.log, 0, 3);
+		world.setBlock(x + 5, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 2, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 3, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 5, y + 0, z + 4, PeatizedBlocks.peat, 0, 3);
@@ -2050,7 +2334,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 2, y + 0, z + 8, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 2, y + 0, z + 9, Blocks.air, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 0, Blocks.air, 0, 3);
-		world.setBlock(x + 1, y + 0, z + 1, Blocks.log, 0, 3);
+		world.setBlock(x + 1, y + 0, z + 1, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 2, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 3, PeatizedBlocks.peat, 0, 3);
 		world.setBlock(x + 1, y + 0, z + 4, PeatizedBlocks.peat, 0, 3);
@@ -2065,7 +2349,7 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 0, y + 0, z + 3, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 4, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 5, Blocks.air, 0, 3);
-		world.setBlock(x + 0, y + 0, z + 6, PeatizedBlocks.peatStairs, 0, 3);
+		world.setBlock(x + 0, y + 0, z + 6, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 7, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 8, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 0, z + 9, Blocks.air, 0, 3);
@@ -2620,10 +2904,11 @@ public class PeathouseGenerator extends WorldGenerator {
 		world.setBlock(x + 0, y + 8, z + 7, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 8, z + 8, Blocks.air, 0, 3);
 		world.setBlock(x + 0, y + 8, z + 9, Blocks.air, 0, 3);
-		return generateR35last(world, rand, x, y, z);
+		return generateR35Last(world, rand, x, y, z);
+
 	}
 
-	public boolean generateR35last(World world, Random rand, int x, int y, int z) {
+	public boolean generateR35Last(World world, Random rand, int x, int y, int z) {
 		world.setBlock(x + 2, y + 2, z + 5, Blocks.torch, 1, 3);
 		world.setBlock(x + 0, y + 2, z + 5, Blocks.torch, 2, 3);
 		world.setBlock(x + 1, y + 1, z + 6, Blocks.wooden_door, 0, 3);
@@ -2647,6 +2932,7 @@ public class PeathouseGenerator extends WorldGenerator {
 	}
 
 	public boolean generateVillager(World world, Random rand, int x, int y, int z) {
+		System.out.println(x + " " + y + " " + z);
 		EntityVillager villager = new EntityVillager(world, PeatizedConfig.villagerId);
 		villager.setPositionAndUpdate(x + 0.5, y, z + 0.5);
 		world.spawnEntityInWorld(villager);
