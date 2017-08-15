@@ -29,9 +29,11 @@ public class PeatizedBlocks implements IInitBase {
 	public static Block peat = new BlockPeat().setBlockName("peatized.peat").setStepSound(Block.soundTypeStone)
 			.setHardness(1.5F).setResistance(10.0F);
 	public static Block peatSlab = new BlockPeatSlab(false).setBlockName("peatized.peatSlab")
-			.setStepSound(Block.soundTypeStone).setHardness(2.0F).setResistance(10.0F);
+			.setBlockTextureName(PeatizedMod.MODID + ":peatbrick").setStepSound(Block.soundTypeStone).setHardness(2.0F)
+			.setResistance(10.0F);
 	public static Block peatSlabDouble = new BlockPeatSlab(true).setBlockName("peatized.peatSlab")
-			.setStepSound(Block.soundTypeStone).setHardness(2.0F).setResistance(10.0F);
+			.setBlockTextureName(PeatizedMod.MODID + ":peatbrick").setStepSound(Block.soundTypeStone).setHardness(2.0F)
+			.setResistance(10.0F);
 	public static Block peatStairs = new BlockPeatizedStairs(peat, 0).setBlockName("peatized.peatStairs")
 			.setStepSound(Block.soundTypeStone);
 

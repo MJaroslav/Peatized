@@ -6,14 +6,16 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import mjaroslav.mcmods.fishingcontroller.api.FishingControllerApi;
+import mjaroslav.mcmods.peatized.PeatizedMod;
 import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
 import mjaroslav.mcmods.peatized.common.world.BlockSludgeGenerator;
-import mjaroslav.mcmods.peatized.common.world.PeathouseGenerator;
+import mjaroslav.mcmods.peatized.common.world.ComponentPeathouse;
 import mjaroslav.mcmods.peatized.common.world.VillagePeatmanManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.FishingHooks.FishableCategory;
 
@@ -29,18 +31,23 @@ public class PeatizedWorldGen implements IInitBase {
 			new WeightedRandomChestContent(Item.getItemFromBlock(PeatizedBlocks.peat), 0, 1, 10, 5),
 			new WeightedRandomChestContent(Item.getItemFromBlock(PeatizedBlocks.peat), 1, 1, 10, 3) };
 	public static ChestGenHooks peathouseChestHook = new ChestGenHooks(PEATHOUSE_CHEST, peathouseLoot, 3, 9);
-	
+
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
+		try {
+			MapGenStructureIO.func_143031_a(ComponentPeathouse.class, "PTVillagePeathouse");
+		} catch (Throwable e) {
+			PeatizedMod.log.error("Peathouse could not be registered.");
+		}
 	}
 
 	@Override
 	public void init(FMLInitializationEvent event) {
-		VillagePeatmanManager peatman = new VillagePeatmanManager();
+		VillagePeatmanManager peathouse = new VillagePeatmanManager();
 		VillagerRegistry.instance().registerVillagerId(PeatizedConfig.villagerId);
-		VillagerRegistry.instance().registerVillageTradeHandler(PeatizedConfig.villagerId, peatman);
+		VillagerRegistry.instance().registerVillageTradeHandler(PeatizedConfig.villagerId, peathouse);
+		VillagerRegistry.instance().registerVillageCreationHandler(peathouse);
 		GameRegistry.registerWorldGenerator(new BlockSludgeGenerator(PeatizedBlocks.bogDirtGenerated, 0, 5), 0);
-		GameRegistry.registerWorldGenerator(new PeathouseGenerator(), 1);
 	}
 
 	@Override
