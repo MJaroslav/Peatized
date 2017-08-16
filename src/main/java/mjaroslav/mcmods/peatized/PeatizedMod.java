@@ -25,6 +25,7 @@ import mjaroslav.mcmods.peatized.common.init.PeatizedIntegration;
 import mjaroslav.mcmods.peatized.common.init.PeatizedItems;
 import mjaroslav.mcmods.peatized.common.init.PeatizedWorldGen;
 import mjaroslav.mcmods.peatized.common.network.NetworkHandler;
+import net.minecraft.util.DamageSource;
 
 @Mod(modid = PeatizedMod.MODID, name = PeatizedMod.NAME, version = PeatizedMod.VERSION, guiFactory = PeatizedMod.GUIFACTORY)
 public class PeatizedMod {

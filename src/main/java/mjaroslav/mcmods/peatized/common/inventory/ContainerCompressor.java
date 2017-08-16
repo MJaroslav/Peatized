@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
 import mjaroslav.mcmods.peatized.common.tileentity.ICompressor;
 import mjaroslav.mcmods.peatized.common.tileentity.TileCompressor;
+import mjaroslav.mcmods.peatized.common.tileentity.TileFuelCompressor;
 import mjaroslav.mcmods.peatized.common.tileentity.TileRFCompressor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -13,6 +14,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class ContainerCompressor extends Container {
@@ -20,6 +22,8 @@ public class ContainerCompressor extends Container {
 	private int lastCurrentJumps;
 	private int lastJumps;
 	private int lastRf;
+	private int lastBurnTime;
+	private int lastCurrentBurnTime;
 
 	public ContainerCompressor(InventoryPlayer player, TileCompressor tile) {
 		this(player, (IInventory) tile);
@@ -31,10 +35,20 @@ public class ContainerCompressor extends Container {
 		this.tile = tile;
 	}
 
+	public ContainerCompressor(InventoryPlayer player, TileFuelCompressor tile) {
+		this(player, (IInventory) tile);
+		this.tile = tile;
+	}
+
 	private ContainerCompressor(InventoryPlayer player, IInventory inventory) {
-		this.addSlotToContainer(new Slot(inventory, 0, 44, 21));
-		this.addSlotToContainer(new SlotCompressor(player.player, inventory, 1, 44, 47));
-		int i;
+		int i = 0;
+		if (inventory instanceof TileFuelCompressor) {
+			this.addSlotToContainer(new Slot(inventory, i, 8, 38));
+			i++;
+		}
+		this.addSlotToContainer(new Slot(inventory, i, 44, 21));
+		i++;
+		this.addSlotToContainer(new SlotCompressor(player.player, inventory, i, 44, 47));
 		for (i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {
 				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -50,6 +64,15 @@ public class ContainerCompressor extends Container {
 		super.addCraftingToCrafters(crafter);
 		crafter.sendProgressBarUpdate(this, 0, this.tile.getCompressor().currentJumps);
 		crafter.sendProgressBarUpdate(this, 1, this.tile.getCompressor().jumps);
+		if (this.tile instanceof TileRFCompressor
+				&& this.lastRf != ((TileRFCompressor) this.tile).getEnergyStored(ForgeDirection.UNKNOWN)) {
+			crafter.sendProgressBarUpdate(this, 2,
+					((TileRFCompressor) this.tile).getEnergyStored(ForgeDirection.UNKNOWN));
+		}
+		if (this.tile instanceof TileFuelCompressor) {
+			crafter.sendProgressBarUpdate(this, 3, ((TileFuelCompressor) this.tile).burnTime);
+			crafter.sendProgressBarUpdate(this, 4, ((TileFuelCompressor) this.tile).currentBurnTime);
+		}
 	}
 
 	@Override
@@ -63,16 +86,26 @@ public class ContainerCompressor extends Container {
 			if (this.lastJumps != this.tile.getCompressor().jumps) {
 				icrafting.sendProgressBarUpdate(this, 1, this.tile.getCompressor().jumps);
 			}
-			if (tile instanceof TileRFCompressor
+			if (this.tile instanceof TileRFCompressor
 					&& this.lastRf != ((TileRFCompressor) this.tile).getEnergyStored(ForgeDirection.UNKNOWN)) {
 				icrafting.sendProgressBarUpdate(this, 2,
 						((TileRFCompressor) this.tile).getEnergyStored(ForgeDirection.UNKNOWN));
+			}
+			if (this.tile instanceof TileFuelCompressor) {
+				if (this.lastBurnTime != ((TileFuelCompressor) this.tile).burnTime)
+					icrafting.sendProgressBarUpdate(this, 3, ((TileFuelCompressor) this.tile).burnTime);
+				if (this.lastCurrentBurnTime != ((TileFuelCompressor) this.tile).currentBurnTime)
+					icrafting.sendProgressBarUpdate(this, 4, ((TileFuelCompressor) this.tile).currentBurnTime);
 			}
 		}
 		this.lastCurrentJumps = this.tile.getCompressor().currentJumps;
 		this.lastJumps = this.tile.getCompressor().jumps;
 		if (tile instanceof TileRFCompressor)
 			this.lastRf = ((TileRFCompressor) this.tile).getEnergyStored(ForgeDirection.UNKNOWN);
+		if (this.tile instanceof TileFuelCompressor) {
+			this.lastBurnTime = ((TileFuelCompressor) this.tile).burnTime;
+			this.lastCurrentBurnTime = ((TileFuelCompressor) this.tile).currentBurnTime;
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -91,6 +124,16 @@ public class ContainerCompressor extends Container {
 				((TileRFCompressor) this.tile).setEnergyStored(value);
 		}
 			break;
+		case 3: {
+			if (this.tile instanceof TileFuelCompressor)
+				((TileFuelCompressor) this.tile).burnTime = value;
+		}
+			break;
+		case 4: {
+			if (this.tile instanceof TileFuelCompressor)
+				((TileFuelCompressor) this.tile).currentBurnTime = value;
+		}
+			break;
 		default:
 			break;
 		}
@@ -103,30 +146,39 @@ public class ContainerCompressor extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+		int a = 0;
+		boolean lit = false;
+		if (this.tile instanceof TileFuelCompressor) {
+			a = 1;
+			lit = true;
+		}
 		ItemStack itemStack = null;
 		Slot slot = (Slot) this.inventorySlots.get(id);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemStack1 = slot.getStack();
 			itemStack = itemStack1.copy();
-			if (id == 1) {
-				if (!this.mergeItemStack(itemStack1, 2, 38, true)) {
+			if (id == 2) {
+				if (!this.mergeItemStack(itemStack1, 3, 39, true)) {
 					return null;
 				}
 				slot.onSlotChange(itemStack1, itemStack);
-			} else if (id != 0) {
-				if (itemStack1 != null && itemStack.getItem() != null
-						&& CompressorRecipes.compressing().getCompressingResult(itemStack1) != null) {
+			} else if (id != 1 && id != 0) {
+				if (CompressorRecipes.compressing().getCompressingResult(itemStack1) != null) {
+					if (!this.mergeItemStack(itemStack1, 0 + a, 1 + a, false)) {
+						return null;
+					}
+				} else if (lit && TileEntityFurnace.isItemFuel(itemStack1)) {
 					if (!this.mergeItemStack(itemStack1, 0, 1, false)) {
 						return null;
 					}
-				} else if (id >= 2 && id < 29) {
-					if (!this.mergeItemStack(itemStack1, 29, 38, false)) {
+				} else if (id >= 2 + a && id < 29 + a) {
+					if (!this.mergeItemStack(itemStack1, 29 + a, 38 + a, false)) {
 						return null;
 					}
-				} else if (id >= 29 && id < 38 && !this.mergeItemStack(itemStack1, 2, 29, false)) {
+				} else if (id >= 29 + a && id < 38 + a && !this.mergeItemStack(itemStack1, 2 + a, 29 + a, false)) {
 					return null;
 				}
-			} else if (!this.mergeItemStack(itemStack1, 2, 38, false)) {
+			} else if (!this.mergeItemStack(itemStack1, 2 + a, 38 + a, false)) {
 				return null;
 			}
 			if (itemStack1.stackSize == 0) {

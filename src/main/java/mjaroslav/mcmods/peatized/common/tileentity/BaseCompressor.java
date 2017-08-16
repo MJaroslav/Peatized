@@ -56,7 +56,7 @@ public class BaseCompressor {
 	}
 
 	public boolean isWorking() {
-		return this.currentJumps > 0 && this.jumps > 0;
+		return this.currentJumps > 0;
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {

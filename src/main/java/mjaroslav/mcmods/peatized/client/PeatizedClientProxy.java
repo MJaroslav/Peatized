@@ -14,6 +14,7 @@ import mjaroslav.mcmods.peatized.common.PeatizedCommonProxy;
 import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
 import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
 import mjaroslav.mcmods.peatized.common.tileentity.TileCompressor;
+import mjaroslav.mcmods.peatized.common.tileentity.TileFuelCompressor;
 import mjaroslav.mcmods.peatized.common.tileentity.TileRFCompressor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,11 +35,13 @@ public class PeatizedClientProxy extends PeatizedCommonProxy {
 	@Override
 	public void init(FMLInitializationEvent event) {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileCompressor.class,
-				new TileCompressorRenderer(PeatizedMod.MODID, "compressor"));
+				new TileCompressorRenderer(PeatizedMod.MODID, "compressor", false));
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(PeatizedBlocks.compressor),
 				new ItemBlockCompressorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileRFCompressor.class,
-				new TileCompressorRenderer(PeatizedMod.MODID, "compressor_rf"));
+				new TileCompressorRenderer(PeatizedMod.MODID, "compressor_rf", false));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileFuelCompressor.class,
+				new TileCompressorRenderer(PeatizedMod.MODID, "compressor_fuel", true));
 		VillagerRegistry.instance().registerVillagerSkin(PeatizedConfig.villagerId,
 				new ResourceLocation(PeatizedMod.MODID + ":textures/entity/villager/peatman.png"));
 	}
