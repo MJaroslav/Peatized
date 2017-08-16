@@ -36,7 +36,7 @@ public class VillagePeatmanManager implements IVillageTradeHandler, IVillageCrea
 
 	@Override
 	public PieceWeight getVillagePieceWeight(Random random, int i) {
-		return new StructureVillagePieces.PieceWeight(ComponentPeathouse.class, 15,
+		return new StructureVillagePieces.PieceWeight(ComponentPeathouse.class, 20,
 				MathHelper.getRandomIntegerInRange(random, 0 + i, 1 + i));
 	}
 
