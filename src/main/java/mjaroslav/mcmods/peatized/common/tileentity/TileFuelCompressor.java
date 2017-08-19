@@ -46,7 +46,7 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
 				this.currentBurnTime--;
 			if (this.cooldown > 0)
 				this.cooldown--;
-			if(!this.isBurning() && !this.compressor.isWorking() && !this.compressor.canWork()) {
+			if (!this.isBurning() && !this.compressor.isWorking() && !this.compressor.canWork()) {
 				this.compressor.jumps = 0;
 				this.compressor.currentJumps = 0;
 				flag1 = true;
@@ -90,28 +90,43 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
 					}
 				} else {
 					if (this.fuelSlot[0] != null && TileEntityFurnace.isItemFuel(this.fuelSlot[0])
-							&& this.compressor.canWork() && !this.compressor.isWorking()) {
-						this.currentBurnTime = this.burnTime = TileEntityFurnace.getItemBurnTime(this.fuelSlot[0]);
-						if (this.currentBurnTime > 0) {
-							if (this.fuelSlot[0] != null) {
-								if (this.fuelSlot[0].stackSize > 0)
-									this.fuelSlot[0].stackSize--;
-								if (this.fuelSlot[0].stackSize <= 0)
-									this.fuelSlot[0] = this.fuelSlot[0].getItem().getContainerItem(this.fuelSlot[0]);
-								flag1 = true;
+							&& this.compressor.canWork()) {
+						if (!this.compressor.isWorking()) {
+							this.currentBurnTime = this.burnTime = TileEntityFurnace.getItemBurnTime(this.fuelSlot[0]);
+							if (this.currentBurnTime > 0) {
+								if (this.fuelSlot[0] != null) {
+									if (this.fuelSlot[0].stackSize > 0)
+										this.fuelSlot[0].stackSize--;
+									if (this.fuelSlot[0].stackSize <= 0)
+										this.fuelSlot[0] = this.fuelSlot[0].getItem()
+												.getContainerItem(this.fuelSlot[0]);
+									flag1 = true;
+								}
+								this.compressor.jumps = CompressorRecipes.compressing()
+										.getJumps(this.compressor.inventory[0]);
+								if (this.compressor.jumps == 1) {
+									this.compressor.jumps = 0;
+									this.compressor.currentJumps = 0;
+									this.compressor.work();
+									this.cooldown = 20;
+									flag1 = true;
+								} else {
+									this.compressor.currentJumps = 1;
+									this.cooldown = 20;
+									flag1 = true;
+								}
 							}
-							this.compressor.jumps = CompressorRecipes.compressing()
-									.getJumps(this.compressor.inventory[0]);
-							if (this.compressor.jumps == 1) {
-								this.compressor.jumps = 0;
-								this.compressor.currentJumps = 0;
-								this.compressor.work();
-								this.cooldown = 20;
-								flag1 = true;
-							} else {
-								this.compressor.currentJumps = 1;
-								this.cooldown = 20;
-								flag1 = true;
+						} else if(!this.isBurning()){
+							this.currentBurnTime = this.burnTime = TileEntityFurnace.getItemBurnTime(this.fuelSlot[0]);
+							if (this.currentBurnTime > 0) {
+								if (this.fuelSlot[0] != null) {
+									if (this.fuelSlot[0].stackSize > 0)
+										this.fuelSlot[0].stackSize--;
+									if (this.fuelSlot[0].stackSize <= 0)
+										this.fuelSlot[0] = this.fuelSlot[0].getItem()
+												.getContainerItem(this.fuelSlot[0]);
+									flag1 = true;
+								}
 							}
 						}
 					}
@@ -120,8 +135,8 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
 			if (flag) {
 				if (flag != this.currentBurnTime > 0)
 					flag = true;
-					BlockCompressor.updateCompressorBlockState(this.getBlockMetadata() == 2, this.currentBurnTime > 0,
-							worldObj, xCoord, yCoord, zCoord);
+				BlockCompressor.updateCompressorBlockState(this.getBlockMetadata() == 2, this.currentBurnTime > 0,
+						worldObj, xCoord, yCoord, zCoord);
 			}
 		}
 		if (flag1)

@@ -22,6 +22,7 @@ public class PeatizedItems implements IInitBase {
 		OreDictionary.registerOre("ballPeat", new ItemStack(resource, 1, 0));
 		OreDictionary.registerOre("brickPeat", new ItemStack(resource, 1, 1));
 		OreDictionary.registerOre("platePeat", new ItemStack(resource, 1, 2));
+		OreDictionary.registerOre("gearStone", new ItemStack(resource, 1, 3));
 	}
 
 	@Override

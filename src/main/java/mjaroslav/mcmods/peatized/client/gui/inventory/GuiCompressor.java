@@ -94,21 +94,21 @@ public class GuiCompressor extends GuiContainer {
 	protected void drawGuiContainerForegroundLayerForFuelCompressor(TileFuelCompressor tile, int x, int y) {
 		if (this.tile.getCompressor().canWork() && tile.hasFuel())
 			this.drawHoveringText(x, y, 162, 72, 7, 7, this.fontRendererObj,
-					new String[] { StatCollector.translateToLocal("container.compressor.fuel.ready") });
+					new String[] { StatCollector.translateToLocal("container.compressor.ready") });
 		this.drawHoveringText(x, y, 162, 62, 7, 7, this.fontRendererObj,
-				new String[] { StatCollector.translateToLocal("container.compressor.fuel.info") });
+				new String[] { StatCollector.translateToLocal("container.compressor.info.fuel") });
 		if (!tile.hasFuel())
 			this.drawHoveringText(x, y, 162, 52, 7, 7, this.fontRendererObj,
-					new String[] { StatCollector.translateToLocal("container.compressor.fuel.noFuel") });
+					new String[] { StatCollector.translateToLocal("container.compressor.noFuel") });
 		if (this.tile.getCompressor().inventory[0] == null
 				|| CompressorRecipes.compressing().getCompressingResult(this.tile.getCompressor().inventory[0]) == null
 				|| CompressorRecipes.compressing().getStackSizeForCompressing(
 						this.tile.getCompressor().inventory[0]) > this.tile.getCompressor().inventory[0].stackSize)
 			this.drawHoveringText(x, y, 162, 42, 7, 7, this.fontRendererObj,
-					new String[] { StatCollector.translateToLocal("container.compressor.fuel.noRecipe") });
+					new String[] { StatCollector.translateToLocal("container.compressor.noRecipe") });
 		if (this.tile.getCompressor().inventoryFull())
 			this.drawHoveringText(x, y, 162, 32, 7, 7, this.fontRendererObj,
-					new String[] { StatCollector.translateToLocal("container.compressor.fuel.inventoryFull") });
+					new String[] { StatCollector.translateToLocal("container.compressor.inventoryFull") });
 	}
 
 	protected void drawGuiContainerForegroundLayerForCompressor(TileCompressor tile, int x, int y) {
@@ -135,21 +135,21 @@ public class GuiCompressor extends GuiContainer {
 	protected void drawGuiContainerForegroundLayerForRFCompressor(TileRFCompressor tile, int x, int y) {
 		if (this.tile.getCompressor().canWork() && tile.hasEnergy())
 			this.drawHoveringText(x, y, 162, 72, 7, 7, this.fontRendererObj,
-					new String[] { StatCollector.translateToLocal("container.compressor.rf.ready") });
+					new String[] { StatCollector.translateToLocal("container.compressor.ready") });
 		this.drawHoveringText(x, y, 162, 62, 7, 7, this.fontRendererObj,
-				new String[] { StatCollector.translateToLocal("container.compressor.rf.info") });
+				new String[] { StatCollector.translateToLocal("container.compressor.info.rf") });
 		if (!tile.hasEnergy())
 			this.drawHoveringText(x, y, 162, 52, 7, 7, this.fontRendererObj,
-					new String[] { StatCollector.translateToLocal("container.compressor.rf.noEnergy") });
+					new String[] { StatCollector.translateToLocal("container.compressor.noEnergy") });
 		if (this.tile.getCompressor().inventory[0] == null
 				|| CompressorRecipes.compressing().getCompressingResult(this.tile.getCompressor().inventory[0]) == null
 				|| CompressorRecipes.compressing().getStackSizeForCompressing(
 						this.tile.getCompressor().inventory[0]) > this.tile.getCompressor().inventory[0].stackSize)
 			this.drawHoveringText(x, y, 162, 42, 7, 7, this.fontRendererObj,
-					new String[] { StatCollector.translateToLocal("container.compressor.rf.noRecipe") });
+					new String[] { StatCollector.translateToLocal("container.compressor.noRecipe") });
 		if (this.tile.getCompressor().inventoryFull())
 			this.drawHoveringText(x, y, 162, 32, 7, 7, this.fontRendererObj,
-					new String[] { StatCollector.translateToLocal("container.compressor.rf.inventoryFull") });
+					new String[] { StatCollector.translateToLocal("container.compressor.inventoryFull") });
 		this.drawHoveringText(x, y, 9, 16, 14, 42, this.fontRendererObj, tile.getEnergyStored(ForgeDirection.UNKNOWN)
 				+ "/" + tile.getMaxEnergyStored(ForgeDirection.UNKNOWN) + " RF");
 	}

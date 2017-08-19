@@ -39,7 +39,7 @@ public class ItemBlockCompressorRenderer implements IItemRenderer {
 		if (type == ItemRenderType.INVENTORY)
 			GL11.glTranslated(0, 1, 0);
 		else
-			GL11.glTranslated(0.5, 1.5, 0.5);
+			GL11.glTranslated(0, 1, 0);
 		GL11.glRotated(180, 0, 0, 1);
 		TileCompressorRenderer.model.render();
 		GL11.glPopMatrix();

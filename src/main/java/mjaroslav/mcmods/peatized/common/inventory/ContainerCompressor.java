@@ -146,51 +146,90 @@ public class ContainerCompressor extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
-		int a = 0;
-		boolean lit = false;
-		if (this.tile instanceof TileFuelCompressor) {
-			a = 1;
-			lit = true;
-		}
-		ItemStack itemStack = null;
+		if (this.tile instanceof TileFuelCompressor)
+			return transferStackInSlotFuel(player, id);
+		return transferStackInSlotNotFuel(player, id);
+	}
+
+	public ItemStack transferStackInSlotNotFuel(EntityPlayer player, int id) {
+		ItemStack itemstack = null;
 		Slot slot = (Slot) this.inventorySlots.get(id);
 		if (slot != null && slot.getHasStack()) {
-			ItemStack itemStack1 = slot.getStack();
-			itemStack = itemStack1.copy();
-			if (id == 2) {
-				if (!this.mergeItemStack(itemStack1, 3, 39, true)) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			if (id == 1) {
+				if (!this.mergeItemStack(itemstack1, 2, 38, true)) {
 					return null;
 				}
-				slot.onSlotChange(itemStack1, itemStack);
-			} else if (id != 1 && id != 0) {
-				if (CompressorRecipes.compressing().getCompressingResult(itemStack1) != null) {
-					if (!this.mergeItemStack(itemStack1, 0 + a, 1 + a, false)) {
+				slot.onSlotChange(itemstack1, itemstack);
+			} else if (id != 0) {
+				if (CompressorRecipes.compressing().getCompressingResult(itemstack1) != null) {
+					if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
 						return null;
 					}
-				} else if (lit && TileEntityFurnace.isItemFuel(itemStack1)) {
-					if (!this.mergeItemStack(itemStack1, 0, 1, false)) {
+				} else if (id >= 2 && id < 29) {
+					if (!this.mergeItemStack(itemstack1, 29, 38, false)) {
 						return null;
 					}
-				} else if (id >= 2 + a && id < 29 + a) {
-					if (!this.mergeItemStack(itemStack1, 29 + a, 38 + a, false)) {
-						return null;
-					}
-				} else if (id >= 29 + a && id < 38 + a && !this.mergeItemStack(itemStack1, 2 + a, 29 + a, false)) {
+				} else if (id >= 29 && id < 38 && !this.mergeItemStack(itemstack1, 2, 29, false)) {
 					return null;
 				}
-			} else if (!this.mergeItemStack(itemStack1, 2 + a, 38 + a, false)) {
+			} else if (!this.mergeItemStack(itemstack1, 2, 38, false)) {
 				return null;
 			}
-			if (itemStack1.stackSize == 0) {
+			if (itemstack1.stackSize == 0) {
 				slot.putStack((ItemStack) null);
 			} else {
 				slot.onSlotChanged();
 			}
-			if (itemStack1.stackSize == itemStack.stackSize) {
+			if (itemstack1.stackSize == itemstack.stackSize) {
 				return null;
 			}
-			slot.onPickupFromSlot(player, itemStack1);
+			slot.onPickupFromSlot(player, itemstack1);
 		}
-		return itemStack;
+		return itemstack;
+	}
+
+	public ItemStack transferStackInSlotFuel(EntityPlayer player, int id) {
+		ItemStack itemstack = null;
+		Slot slot = (Slot) this.inventorySlots.get(id);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			if (id == 2) {
+				if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+					return null;
+				}
+				slot.onSlotChange(itemstack1, itemstack);
+			} else if (id != 1 && id != 0) {
+				if (CompressorRecipes.compressing().getCompressingResult(itemstack1) != null) {
+					if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
+						return null;
+					}
+				} else if (TileEntityFurnace.isItemFuel(itemstack1)) {
+					if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+						return null;
+					}
+				} else if (id >= 3 && id < 30) {
+					if (!this.mergeItemStack(itemstack1, 30, 39, false)) {
+						return null;
+					}
+				} else if (id >= 30 && id < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
+					return null;
+				}
+			} else if (!this.mergeItemStack(itemstack1, 3, 39, false)) {
+				return null;
+			}
+			if (itemstack1.stackSize == 0) {
+				slot.putStack((ItemStack) null);
+			} else {
+				slot.onSlotChanged();
+			}
+			if (itemstack1.stackSize == itemstack.stackSize) {
+				return null;
+			}
+			slot.onPickupFromSlot(player, itemstack1);
+		}
+		return itemstack;
 	}
 }

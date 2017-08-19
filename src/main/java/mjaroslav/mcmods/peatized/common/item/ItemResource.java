@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 public class ItemResource extends Item {
-	private IIcon[] icon = new IIcon[3];
+	private IIcon[] icon = new IIcon[4];
 
 	public ItemResource() {
 		super();
@@ -25,12 +25,11 @@ public class ItemResource extends Item {
 		icon[0] = register.registerIcon(PeatizedMod.MODID + ":peat_ball");
 		icon[1] = register.registerIcon(PeatizedMod.MODID + ":peat_brick");
 		icon[2] = register.registerIcon(PeatizedMod.MODID + ":peat_plate");
+		icon[3] = register.registerIcon(PeatizedMod.MODID + ":gear_stone");
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
-		if (itemStack.getItemDamage() > 5)
-			return super.getUnlocalizedName(itemStack);
 		return super.getUnlocalizedName() + "." + itemStack.getItemDamage();
 	}
 
@@ -44,7 +43,7 @@ public class ItemResource extends Item {
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		for (int meta = 0; meta < 3; meta++)
+		for (int meta = 0; meta < 4; meta++)
 			list.add(new ItemStack(item, 1, meta));
 	}
 }

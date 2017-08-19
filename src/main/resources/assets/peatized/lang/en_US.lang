@@ -5,6 +5,7 @@ tile.peatized.bogDirt.dry.name=Dry bog dirt
 tile.peatized.bogDirt.error.name=Bog dirt (error)
 tile.peatized.compressor.0.name=Compressor
 tile.peatized.compressor.1.name=Flux compressor
+tile.peatized.compressor.2.name=Furnace compressor
 tile.peatized.peat.0.name=Peat bricks
 tile.peatized.peat.1.name=Chiseled peat bricks
 tile.peatized.peatSlab.0.name=Peat bricks slab
@@ -13,6 +14,7 @@ tile.peatized.peatStairs.name=Peat bricks stairs
 item.peatized.resource.0.name=Peat ball
 item.peatized.resource.1.name=Peat brick
 item.peatized.resource.2.name=Peat plate
+item.peatized.resource.3.name=Stone gear
 
 tooltip.bogDirt.biome=Biome bonus: {biomeBonus}
 tooltip.bogDirt.humidity=Humidity: {value}
@@ -27,8 +29,19 @@ tooltip.bogDirt.water.1=Water affect up to: {waterReqMax} (Steps: {waterSteps}/{
 tooltip.bogDirt.water.2=Water on step: {waterOneStep} (Step Bonus: {waterStepBonus})
 tooltip.error.meta=Bad meta!
 
-container.compressor.0=Compressor
-container.compressor.1=Flux compressor
+container.compressor=Compressor
+container.compressor.rf=Flux compressor
+container.compressor.fuel=Furnace compressor
+
+container.compressor.ready=§lReady§r
+container.compressor.noRecipe=§lNo recipe&n&n§r§7§oToo few ingredients, or you&n§r§7§ocan not create anything at&n§r§7§oall.§r
+container.compressor.inventoryFull=§lInventory is full&n&n§r§7§oPlease empty the output&n§r§7§oslot.§r
+container.compressor.info=§lInformation&n&n§r§7§oIt serves to compress items&n§r§7§oby jumping on the pressure&n§r§7§oplate. Does not require&n§r§7§oenergy. Each recipe&n§r§7§orequires its own number of&n§r§7§ojumps.&n&n§r§7§oThis compressor can not&n§r§7§ocompress some items.§r
+container.compressor.info.rf=§lInformation&n&n§r§7§oIt serves to compress items&n§r§7§oconsuming RF. Each recipe&n§r§7§orequires its own amount of&n§r§7§oenergy.§r
+container.compressor.info.fuel=§lInformation&n&n§r§7§oIt serves to compress items&n§r§7§oby consuming combustible&n§r§7§ofuels. Each recipe requires&n§r§7§oits own amount of time&n§r§7§ospent on compression.§r
+container.compressor.noPlate=§lNo plate&n&n§r§7§oPlease place a stone&n§r§7§opressure plate on the&n§r§7§ocompressor.§r
+container.compressor.noEnergy=§lNo energy&n&n§r§7§oPlease apply RF energy to&n§r§7§othe compressor.§r
+container.compressor.noFuel=§lNo fuel&n&n§r§7§oPlease load fuel into the&n§r§7§oslot designated for it.§r
 
 peatized.commands.compressorreload.done=Compressor recipes reloaded!
 
