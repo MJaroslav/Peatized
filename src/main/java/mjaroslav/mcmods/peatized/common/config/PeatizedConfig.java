@@ -22,8 +22,8 @@ public class PeatizedConfig implements IInitBase {
 	public static int rainSummand;
 	public static boolean generateBogDirt;
 	public static int villagerId;
-	public static boolean altCompressorRemderer;
 	public static int peathousePercentChance;
+	public static boolean altRenaQuote;
 
 	public static String configFolder;
 
@@ -59,10 +59,10 @@ public class PeatizedConfig implements IInitBase {
 				"Add to the chance of bog dirt 'growth', if it's raining and theblock is open to the sky");
 		generateBogDirt = config.getBoolean("generate_bog_dirt", categoryGeneral, true, "Generate bog dirt in swamp");
 		villagerId = config.getInt("villager_id", categoryGeneral, 193, 10, 256, "Peat man villager id");
-		altCompressorRemderer = config.getBoolean("alternative_compressor", categoryGeneral, false,
-				"Use alternative compressor model");
 		peathousePercentChance = config.getInt("peathome_percent_chance", categoryGeneral, 2, 0, 100,
 				"Chance of peathouse generation on chunk. 0 - disable");
+		altRenaQuote = config.getBoolean("alt_rana_quote", categoryGeneral, true,
+				"Use an alternative Rena quote (Easter egg)");
 
 		if (config.hasChanged())
 			config.save();

@@ -13,11 +13,11 @@ public class ItemBlockCompressorRenderer implements IItemRenderer {
 	public static ResourceLocation getRes(int meta) {
 		switch (meta) {
 		default:
-			return new ResourceLocation(PeatizedMod.MODID + ":textures/entity/compressor/compressor.png");
+			return new ResourceLocation(PeatizedMod.MODID, "textures/models/compressor/compressor.png");
 		case 1:
-			return new ResourceLocation(PeatizedMod.MODID + ":textures/entity/compressor/compressor_rf.png");
+			return new ResourceLocation(PeatizedMod.MODID, "textures/models/compressor/compressor_rf.png");
 		case 2:
-			return new ResourceLocation(PeatizedMod.MODID + ":textures/entity/compressor/compressor_fuel.png");
+			return new ResourceLocation(PeatizedMod.MODID, "textures/models/compressor/compressor_fuel.png");
 		}
 	}
 

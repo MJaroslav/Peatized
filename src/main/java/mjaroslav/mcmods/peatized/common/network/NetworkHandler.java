@@ -50,8 +50,6 @@ public class NetworkHandler implements IInitBase {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
-		NETWORK.registerMessage(PacketParticlesMP.class, PacketParticlesMP.class, dec++, Side.SERVER);
-		NETWORK.registerMessage(PacketFire.class, PacketFire.class, dec++, Side.CLIENT);
 		NETWORK.registerMessage(PacketCompressingRecipes.class, PacketCompressingRecipes.class, dec++, Side.CLIENT);
 	}
 

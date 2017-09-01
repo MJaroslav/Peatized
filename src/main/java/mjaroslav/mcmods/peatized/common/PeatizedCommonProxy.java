@@ -26,4 +26,7 @@ public class PeatizedCommonProxy implements IInitBase {
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
 	}
+
+	public void spawnParticle(String string, double x, double y, double z, Object... args) {	
+	}
 }

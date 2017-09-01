@@ -2,13 +2,7 @@ package mjaroslav.mcmods.peatized.common.event;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
-import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes.CompressorRecipe;
-import mjaroslav.mcmods.peatized.common.network.NetworkHandler;
-import mjaroslav.mcmods.peatized.common.network.PacketFire;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,8 +41,6 @@ public class EventHandlerWorld {
 			} while (id < event.drops.size());
 			event.drops.add(new ItemStack(Blocks.double_stone_slab, 1, 9));
 		}
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
-			NetworkHandler.sendToAll(new PacketFire(event.x + 0.5, event.y + 0.5, event.z + 0.5));
 	}
 
 	@SubscribeEvent

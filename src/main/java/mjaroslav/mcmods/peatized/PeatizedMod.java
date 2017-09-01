@@ -25,7 +25,8 @@ import mjaroslav.mcmods.peatized.common.init.PeatizedIntegration;
 import mjaroslav.mcmods.peatized.common.init.PeatizedItems;
 import mjaroslav.mcmods.peatized.common.init.PeatizedWorldGen;
 import mjaroslav.mcmods.peatized.common.network.NetworkHandler;
-import net.minecraft.util.DamageSource;
+import net.minecraft.item.Item.ToolMaterial;
+import net.minecraftforge.common.util.EnumHelper;
 
 @Mod(modid = PeatizedMod.MODID, name = PeatizedMod.NAME, version = PeatizedMod.VERSION, guiFactory = PeatizedMod.GUIFACTORY)
 public class PeatizedMod {
@@ -45,6 +46,8 @@ public class PeatizedMod {
 	public static PeatizedCommonProxy proxyModule = new PeatizedCommonProxy();
 
 	public static PeatizedTab tab = new PeatizedTab(MODID);
+	
+	public static ToolMaterial rena = EnumHelper.addToolMaterial("rena", 4, 2500, 9.0F, 4.0F, 30);
 
 	public static ArrayList<IInitBase> modules = new ArrayList<IInitBase>();
 

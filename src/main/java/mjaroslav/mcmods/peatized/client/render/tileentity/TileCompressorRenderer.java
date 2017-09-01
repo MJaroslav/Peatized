@@ -17,11 +17,11 @@ public class TileCompressorRenderer extends TileEntitySpecialRenderer {
 	public boolean useLit;
 
 	public TileCompressorRenderer(String resourceId, String blockTexture, boolean useLit) {
-		this.texture = new ResourceLocation(resourceId + ":textures/entity/compressor/" + blockTexture + ".png");
+		this.texture = new ResourceLocation(resourceId + ":textures/models/compressor/" + blockTexture + ".png");
 		this.useLit = useLit;
 		if (this.useLit)
 			this.textureLit = new ResourceLocation(
-					resourceId + ":textures/entity/compressor/" + blockTexture + "_on.png");
+					resourceId + ":textures/models/compressor/" + blockTexture + "_on.png");
 	}
 
 	@Override
