@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 
 public class ItemRenaWeapon extends ItemAxe {
 	private boolean isUnbreakable;
-	public float damageVsEntity;
 
 	public ItemRenaWeapon(ToolMaterial material, boolean isUnbreakable) {
 		super(material);
@@ -30,7 +29,7 @@ public class ItemRenaWeapon extends ItemAxe {
 			this.setMaxDamage(0);
 		this.setCreativeTab(PeatizedMod.tab);
 		this.isFull3D();
-		this.damageVsEntity = 8.0F + material.getDamageVsEntity();
+		this.damageVsEntity = 6.0F + material.getDamageVsEntity();
 		this.setMaxDamage((int) Math.round(material.getMaxUses() * 1.5));
 	}
 
@@ -119,14 +118,6 @@ public class ItemRenaWeapon extends ItemAxe {
 				}
 			}
 		return super.onLeftClickEntity(stack, player, entity);
-	}
-
-	@Override
-	public boolean onBlockStartBreak(ItemStack itemStack, int X, int Y, int Z, EntityPlayer player) {
-		if (itemStack != null && itemStack.getItem() instanceof ItemRenaWeapon)
-			if (player != null && player.capabilities.isCreativeMode)
-				return !player.worldObj.isRemote ? true : false;
-		return false;
 	}
 
 	@Override
