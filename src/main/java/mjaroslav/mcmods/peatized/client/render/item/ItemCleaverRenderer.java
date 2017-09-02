@@ -1,8 +1,11 @@
 package mjaroslav.mcmods.peatized.client.render.item;
 
+import java.awt.Color;
+
 import org.lwjgl.opengl.GL11;
 
 import mjaroslav.mcmods.peatized.PeatizedMod;
+import mjaroslav.mcmods.peatized.common.item.ItemCleaver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.item.EnumAction;
@@ -12,13 +15,21 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
-public class ItemRenaWeaponRenderer implements IItemRenderer {
+public class ItemCleaverRenderer implements IItemRenderer {
 	public static final IModelCustom model = AdvancedModelLoader
-			.loadModel(new ResourceLocation(PeatizedMod.MODID, "models/rena_s_weapon.obj"));
-	public final ResourceLocation texture;
+			.loadModel(new ResourceLocation(PeatizedMod.MODID, "models/cleaver.obj"));
 
-	public ItemRenaWeaponRenderer(ResourceLocation texture) {
-		this.texture = texture;
+	public static ResourceLocation textureBase = new ResourceLocation(PeatizedMod.MODID,
+			"textures/models/cleaver/cleaver_base.png");
+	public static ResourceLocation textureBlade = new ResourceLocation(PeatizedMod.MODID,
+			"textures/models/cleaver/cleaver_blade.png");
+	public static ResourceLocation textureBlood = new ResourceLocation(PeatizedMod.MODID,
+			"textures/models/cleaver/cleaver_blade_blood.png");
+
+	public boolean useBlood;
+
+	public ItemCleaverRenderer(boolean useBlood) {
+		this.useBlood = useBlood;
 	}
 
 	@Override
@@ -33,6 +44,8 @@ public class ItemRenaWeaponRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+		if (!(item.getItem() instanceof ItemCleaver))
+			return;
 		EntityClientPlayerMP entityClientPlayerMP = null;
 		GL11.glPushMatrix();
 		GL11.glScaled(0.25, 0.25, 0.25);
@@ -76,12 +89,29 @@ public class ItemRenaWeaponRenderer implements IItemRenderer {
 			GL11.glRotated(45, 0, 1, 0);
 			GL11.glRotated(-45, 0, 0, 1);
 			GL11.glTranslatef(0.0F, -4.0F, 0.0F);
-		} break;
+		}
+			break;
 		default:
 			break;
 		}
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-		model.renderAll();
+		GL11.glPushMatrix();
+		if (this.useBlood)
+			Minecraft.getMinecraft().renderEngine.bindTexture(textureBlood);
+		else {
+			Minecraft.getMinecraft().renderEngine.bindTexture(textureBlade);
+			int intColor = ((ItemCleaver) item.getItem()).getBladeColor();
+			if (intColor != 16777215) {
+				Color color = new Color(intColor);
+				GL11.glColor3d(color.getRed(), color.getGreen(), color.getBlue());
+			}
+		}
+		model.renderPart("blade");
+		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+		GL11.glColor3d(256, 256, 256);
+		Minecraft.getMinecraft().renderEngine.bindTexture(textureBase);
+		model.renderPart("base");
+		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
 }

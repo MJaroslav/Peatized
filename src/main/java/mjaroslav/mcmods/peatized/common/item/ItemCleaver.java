@@ -19,11 +19,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-public class ItemRenaWeapon extends ItemAxe {
+public class ItemCleaver extends ItemAxe {
 	private boolean isUnbreakable;
+	private int bladeColor;
 
-	public ItemRenaWeapon(ToolMaterial material, boolean isUnbreakable) {
+	public ItemCleaver(ToolMaterial material, boolean isUnbreakable, int color) {
 		super(material);
+		this.bladeColor = color;
 		this.isUnbreakable = isUnbreakable;
 		if (this.isUnbreakable)
 			this.setMaxDamage(0);
@@ -33,8 +35,16 @@ public class ItemRenaWeapon extends ItemAxe {
 		this.setMaxDamage((int) Math.round(material.getMaxUses() * 1.5));
 	}
 
-	public ItemRenaWeapon(ToolMaterial material) {
-		this(material, material == PeatizedMod.rena);
+	public int getBladeColor() {
+		return bladeColor;
+	}
+
+	public ItemCleaver(ToolMaterial material, int color) {
+		this(material, material == PeatizedMod.rena, color);
+	}
+
+	public ItemCleaver(ToolMaterial material) {
+		this(material, material == PeatizedMod.rena, 16777215);
 	}
 
 	public boolean isUnbreakable() {
