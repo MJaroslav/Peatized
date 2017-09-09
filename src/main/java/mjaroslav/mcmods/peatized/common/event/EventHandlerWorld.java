@@ -3,9 +3,13 @@ package mjaroslav.mcmods.peatized.common.event;
 import com.mojang.realmsclient.gui.ChatFormatting;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import mjaroslav.mcmods.peatized.common.init.PeatizedItems;
+import mjaroslav.mcmods.peatized.common.item.ItemCleaver;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.oredict.OreDictionary;
@@ -54,6 +58,23 @@ public class EventHandlerWorld {
 				}
 				event.toolTip.add(ChatFormatting.DARK_GRAY.toString() + ChatFormatting.ITALIC.toString()
 						+ OreDictionary.getOreName(id));
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void anvilUpdateEvent(AnvilUpdateEvent event) {
+		if (event.left != null && event.right != null) {
+			if (event.left.getItem() instanceof ItemCleaver && event.left.getItem() != PeatizedItems.cleaverRena) {
+				if (event.right.getItem() == Items.spider_eye
+						&& event.right.getDisplayName().toLowerCase().replace(" ", "").endsWith("meatball")) {
+					if (event.left.getDisplayName().toLowerCase().replace(" ", "").endsWith("forrena")) {
+						if (event.name.toLowerCase().replace(" ", "").equals("nologic")) {
+							event.output = new ItemStack(PeatizedItems.cleaverRena);
+							event.cost = 30;
+						}
+					}
+				}
 			}
 		}
 	}
