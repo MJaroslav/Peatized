@@ -51,11 +51,10 @@ public class PeatizedClientProxy extends PeatizedCommonProxy {
 				new TileCompressorRenderer(PeatizedMod.MODID, "compressor_fuel", true));
 		VillagerRegistry.instance().registerVillagerSkin(PeatizedConfig.villagerId,
 				new ResourceLocation(PeatizedMod.MODID, "textures/entity/villager/peatman.png"));
-		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverIron, new ItemCleaverRenderer(false));
-		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverDiamond, new ItemCleaverRenderer(false));
-		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverGold, new ItemCleaverRenderer(false));
-		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverPink, new ItemCleaverRenderer(false));
-		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverRena, new ItemCleaverRenderer(true));
+		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverIron, new ItemCleaverRenderer());
+		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverDiamond, new ItemCleaverRenderer());
+		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverGold, new ItemCleaverRenderer());
+		MinecraftForgeClient.registerItemRenderer(PeatizedItems.cleaverRena, new ItemCleaverRenderer());
 	}
 
 	@Override

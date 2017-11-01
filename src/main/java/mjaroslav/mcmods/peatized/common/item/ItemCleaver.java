@@ -2,9 +2,9 @@ package mjaroslav.mcmods.peatized.common.item;
 
 import java.util.List;
 
+import mjaroslav.mcmods.mjutils.common.utils.GameUtils;
 import mjaroslav.mcmods.peatized.PeatizedMod;
 import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
-import mjaroslav.mcmods.peatized.common.utils.GameUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -16,12 +16,14 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemCleaver extends ItemAxe {
 	private boolean isUnbreakable;
 	private int bladeColor;
+	public int blooded;
 
 	public ItemCleaver(ToolMaterial material, boolean isUnbreakable, int color) {
 		super(material);
@@ -54,8 +56,7 @@ public class ItemCleaver extends ItemAxe {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean advanced) {
 		if (this.toolMaterial == PeatizedMod.rena)
-			list.add(StatCollector
-					.translateToLocal("tooltip.cleaver.rena" + (PeatizedConfig.altRenaQuote ? ".alt" : "")));
+			list.add(StatCollector.translateToLocal("tooltip.cleaver.rena" + (PeatizedConfig.altRenaQuote ? ".alt" : "")));
 	}
 
 	@Override
@@ -108,10 +109,10 @@ public class ItemCleaver extends ItemAxe {
 						Entity target = (Entity) entityList.get(id);
 						if (!(target.isDead)) {
 							if (target instanceof EntityLiving && target.getEntityId() != entity.getEntityId()) {
-								if ((target instanceof EntityTameable && !((EntityTameable) target).func_152113_b()
-										.equals(player.getCommandSenderName()))
-										|| ((target instanceof EntityPlayer) && (((EntityPlayer) target)
-												.getCommandSenderName() == player.getCommandSenderName()))) {
+								if ((target instanceof EntityTameable
+										&& !((EntityTameable) target).func_152113_b().equals(player.getCommandSenderName()))
+										|| ((target instanceof EntityPlayer)
+												&& (((EntityPlayer) target).getCommandSenderName() == player.getCommandSenderName()))) {
 									continue;
 								}
 								if (target.isEntityAlive()) {
@@ -127,7 +128,24 @@ public class ItemCleaver extends ItemAxe {
 					}
 				}
 			}
+		if (player.worldObj.isRemote && entity instanceof EntityLivingBase) {
+			if (!stack.hasTagCompound())
+				stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setShort("blooded", (short) GameUtils.getTicksFromSeconds(10));
+		}
 		return super.onLeftClickEntity(stack, player, entity);
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int i, boolean f) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("blooded")) {
+			short value = stack.getTagCompound().getShort("blooded");
+			if (value > 0)
+				value--;
+			if (value < 0)
+				value = 0;
+			stack.getTagCompound().setShort("blooded", value);
+		}
 	}
 
 	@Override

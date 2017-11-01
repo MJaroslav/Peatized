@@ -9,11 +9,11 @@ import java.util.Map.Entry;
 
 import com.google.gson.annotations.SerializedName;
 
+import mjaroslav.mcmods.mjutils.common.json.JSONReader;
 import mjaroslav.mcmods.peatized.PeatizedMod;
 import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
 import mjaroslav.mcmods.peatized.common.init.PeatizedItems;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes.CompressorRecipeJSON.LiteItemStackJSON;
-import mjaroslav.mcmods.peatized.common.utils.JSONReader;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -36,7 +36,7 @@ public class CompressorRecipes {
 	}
 
 	private static JSONReader<CompressorRecipeJSON[]> reader = new JSONReader<CompressorRecipeJSON[]>(
-			new CompressorRecipeJSON[] {}, CompressorRecipeJSON[].class,
+			new CompressorRecipeJSON[] {},
 			new File(PeatizedConfig.configFolder + "/" + PeatizedMod.MODID + "_compressor_recipes.json"), true);
 
 	private static CompressorRecipeJSON[] defaultRecipes = new CompressorRecipeJSON[] {};
@@ -57,8 +57,8 @@ public class CompressorRecipes {
 				new LiteItemStackJSON(new ItemStack(Items.blaze_rod, 1)), 0.5F, 4, false));
 		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustRedstone", 9),
 				new LiteItemStackJSON("blockRedstone", 1), 0.5F, 4, false));
-		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustTinyTin", 9),
-				new LiteItemStackJSON("dustLead", 1), 0.5F, 2, false));
+		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustTinyTin", 9), new LiteItemStackJSON("dustLead", 1),
+				0.5F, 2, false));
 		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustTinyLapis", 9),
 				new LiteItemStackJSON("dustLapis", 1), 0.5F, 2, false));
 		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustTinyObsidian", 9),
@@ -73,8 +73,8 @@ public class CompressorRecipes {
 				new LiteItemStackJSON("dustIron", 1), 0.5F, 2, false));
 		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustTinyGold", 9),
 				new LiteItemStackJSON("dustGold", 1), 0.5F, 2, false));
-		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustTinyTin", 9),
-				new LiteItemStackJSON("dustTin", 1), 0.5F, 2, false));
+		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustTinyTin", 9), new LiteItemStackJSON("dustTin", 1),
+				0.5F, 2, false));
 		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("dustTinySilver", 9),
 				new LiteItemStackJSON("dustSilver", 1), 0.5F, 2, false));
 		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON("ingotBrickNether", 4),
@@ -86,7 +86,7 @@ public class CompressorRecipes {
 		defaults.add(new CompressorRecipeJSON(new LiteItemStackJSON(new ItemStack(Items.clay_ball, 4)),
 				new LiteItemStackJSON(new ItemStack(Blocks.clay, 1)), 0.5F, 4, false));
 		defaultRecipes = defaults.toArray(new CompressorRecipeJSON[] {});
-		reader.setNewDefault(defaultRecipes);
+		reader.defaults = defaultRecipes;
 	}
 
 	public static void readFromConfig() {
@@ -194,8 +194,7 @@ public class CompressorRecipes {
 		}
 	}
 
-	public void addCompressingRecipe(String ore, int count, ItemStack result, float exp, int jumps,
-			boolean electrical) {
+	public void addCompressingRecipe(String ore, int count, ItemStack result, float exp, int jumps, boolean electrical) {
 		if (OreDictionary.doesOreNameExist(ore)) {
 			for (ItemStack itemStack : OreDictionary.getOres(ore)) {
 				ItemStack newStack = itemStack.copy();

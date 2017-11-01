@@ -15,7 +15,9 @@ item.peatized.resource.0.name=Комок торфа
 item.peatized.resource.1.name=Брикет торфа
 item.peatized.resource.2.name=Пластина торфа
 item.peatized.resource.3.name=Каменная шестерня
-item.peatized.cleaver.name=Тесак
+item.peatized.cleaver.iron.name=Железный тесак
+item.peatized.cleaver.diamond.name=Алмазный тесак
+item.peatized.cleaver.gold.name=Золотой тесак
 item.peatized.cleaver.rena.name=Тесак Рены
 
 tooltip.bogDirt.biome=Бонус биома: {biomeBonus}

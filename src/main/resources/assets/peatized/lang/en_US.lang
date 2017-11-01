@@ -15,7 +15,9 @@ item.peatized.resource.0.name=Peat ball
 item.peatized.resource.1.name=Peat brick
 item.peatized.resource.2.name=Peat plate
 item.peatized.resource.3.name=Stone gear
-item.peatized.cleaver.name=Cleaver
+item.peatized.cleaver.iron.name=Iron cleaver
+item.peatized.cleaver.diamond.name=Diamond cleaver
+item.peatized.cleaver.gold.name=Gold cleaver
 item.peatized.cleaver.rena.name=Rena's cleaver
 
 tooltip.bogDirt.biome=Biome bonus: {biomeBonus}
