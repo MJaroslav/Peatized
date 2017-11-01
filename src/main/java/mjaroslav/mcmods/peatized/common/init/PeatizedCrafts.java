@@ -4,12 +4,16 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import mjaroslav.mcmods.mjutils.common.anvil.AnvilRecipe;
+import mjaroslav.mcmods.mjutils.common.anvil.AnvilUtils;
+import mjaroslav.mcmods.mjutils.common.anvil.AnvilUtils.AnvilResult;
 import mjaroslav.mcmods.mjutils.common.fuel.FuelUtils;
 import mjaroslav.mcmods.mjutils.common.objects.IModModule;
 import mjaroslav.mcmods.mjutils.common.objects.ModInitModule;
 import mjaroslav.mcmods.peatized.PeatizedMod;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -51,6 +55,9 @@ public class PeatizedCrafts implements IModModule {
 		FuelUtils.addFuel(new ItemStack(PeatizedItems.resource, 1, 0), 1F);
 		FuelUtils.addFuel(new ItemStack(PeatizedItems.resource, 1, 1), 10F);
 		FuelUtils.addFuel(new ItemStack(PeatizedItems.resource, 1, 2), 2.5F);
+		AnvilUtils.instance().addRecipe(new AnvilResult(new ItemStack(PeatizedItems.cleaverRena, 1), 30),
+				new AnvilRecipe(new ItemStack(PeatizedItems.cleaverIron, 1, 0), new ItemStack(Items.nether_star, 1, 0))
+						.setName("forrena"));
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import java.util.Random;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
 import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
-import mjaroslav.mcmods.peatized.common.init.PeatizedWorldGen;
+import mjaroslav.mcmods.peatized.common.init.PeatizedWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -113,7 +113,7 @@ public class ComponentPeathouse extends StructureVillagePieces.Village {
 		this.placeBlockAtCurrentPosition(world, Blocks.fence, 0, 4, 1, 2, box);
 		this.placeBlockAtCurrentPosition(world, Blocks.wooden_pressure_plate, 0, 4, 2, 2, box);
 		this.generateStructureChestContents(world, box, rand, 6, 1, 4,
-				PeatizedWorldGen.peathouseChestHook.getItems(rand), PeatizedWorldGen.peathouseChestHook.getCount(rand));
+				PeatizedWorld.peathouseChestHook.getItems(rand), PeatizedWorld.peathouseChestHook.getCount(rand));
 		this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 5, 2, 0, box);
 		this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 5, 2, 2, box);
 		this.placeDoorAtCurrentPosition(world, box, rand, 6, 1, 1, getMetadataWithOffset(Blocks.wooden_door, 1));

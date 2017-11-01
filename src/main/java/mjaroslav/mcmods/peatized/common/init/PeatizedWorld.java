@@ -29,7 +29,7 @@ import net.minecraftforge.common.FishingHooks.FishableCategory;
 import net.minecraftforge.common.MinecraftForge;
 
 @ModInitModule(modid = PeatizedMod.MODID)
-public class PeatizedWorldGen implements IModModule {
+public class PeatizedWorld implements IModModule {
 	public static final String PEATHOUSE_CHEST = "peathouse";
 
 	public static WeightedRandomChestContent[] peathouseLoot = new WeightedRandomChestContent[] {

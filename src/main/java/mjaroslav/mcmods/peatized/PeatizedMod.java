@@ -20,11 +20,12 @@ import mjaroslav.mcmods.peatized.common.creativetab.PeatizedTab;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.common.util.EnumHelper;
 
-@Mod(modid = PeatizedMod.MODID, name = PeatizedMod.NAME, version = PeatizedMod.VERSION, guiFactory = PeatizedMod.GUIFACTORY)
+@Mod(modid = PeatizedMod.MODID, name = PeatizedMod.NAME, version = PeatizedMod.VERSION, guiFactory = PeatizedMod.GUIFACTORY, dependencies = PeatizedMod.DEPENDENCIES)
 public class PeatizedMod {
 	public static final String MODID = "peatized";
 	public static final String NAME = "Peatized";
 	public static final String VERSION = "1.7.10-1";
+	public static final String DEPENDENCIES = "required-after:mjutils@[1.7.10-3,);";
 	public static final String GUIFACTORY = "mjaroslav.mcmods.peatized.client.gui.PeatizedGuiFactory";
 	public static final String SERVERPROXY = "mjaroslav.mcmods.peatized.common.PeatizedCommonProxy";
 	public static final String CLIENTPROXY = "mjaroslav.mcmods.peatized.client.PeatizedClientProxy";
@@ -38,13 +39,13 @@ public class PeatizedMod {
 	public static PeatizedCommonProxy proxy = new PeatizedCommonProxy();
 
 	public static PeatizedTab tab = new PeatizedTab(MODID);
-	
+
 	public static ToolMaterial rena = EnumHelper.addToolMaterial("rena", 4, 2500, 9.0F, 4.0F, 30);
 
 	public static PeatizedConfig config = new PeatizedConfig();
-	
+
 	public static ModInitHandler initHandler = new ModInitHandler(MODID);
-	
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		this.config.preInit(event);

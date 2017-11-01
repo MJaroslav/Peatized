@@ -29,6 +29,8 @@ public class ItemCleaverRenderer implements IItemRenderer {
 			"textures/models/cleaver/cleaver_blade.png");
 	public static ResourceLocation textureBlood = new ResourceLocation(PeatizedMod.MODID,
 			"textures/models/cleaver/cleaver_blade_blood.png");
+	public static ResourceLocation textureBloodAlt = new ResourceLocation(PeatizedMod.MODID,
+			"textures/models/cleaver/cleaver_blade_blood_alt.png");
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -108,7 +110,7 @@ public class ItemCleaverRenderer implements IItemRenderer {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glColor4d(1D, 1D, 1D, (double) value / 200);
-			Minecraft.getMinecraft().renderEngine.bindTexture(textureBlood);
+			Minecraft.getMinecraft().renderEngine.bindTexture(PeatizedConfig.altBlood ? textureBloodAlt : textureBlood);
 			modelSecond.renderPart("blade");
 			GL11.glPopMatrix();
 		}

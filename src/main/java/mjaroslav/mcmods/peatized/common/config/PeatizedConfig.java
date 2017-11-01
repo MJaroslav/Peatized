@@ -22,6 +22,7 @@ public class PeatizedConfig extends ConfigurationBase {
 	public static int peathousePercentChance;
 	public static boolean altRenaQuote;
 	public static boolean renderBlood;
+	public static boolean altBlood;
 
 	public static String configFolder;
 
@@ -67,6 +68,7 @@ public class PeatizedConfig extends ConfigurationBase {
 				"Chance of peathouse generation on chunk. 0 - disable");
 		altRenaQuote = instance.getBoolean("alt_rana_quote", categoryGeneral, true,
 				"Use an alternative Rena quote (Easter egg)");
-		renderBlood = instance.getBoolean("render_blood", categoryGeneral, true, "Render blood on cleavers.");
+		renderBlood = instance.getBoolean("render_blood", categoryGeneral, true, "Render blood on cleavers");
+		altBlood = instance.getBoolean("alt_blood", categoryGeneral, false, "Use alternative blood texture");
 	}
 }
