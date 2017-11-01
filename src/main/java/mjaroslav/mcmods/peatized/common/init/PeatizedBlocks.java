@@ -4,6 +4,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import mjaroslav.mcmods.mjutils.common.objects.IModModule;
+import mjaroslav.mcmods.mjutils.common.objects.ModInitModule;
 import mjaroslav.mcmods.peatized.PeatizedMod;
 import mjaroslav.mcmods.peatized.common.block.BlockBogDirt;
 import mjaroslav.mcmods.peatized.common.block.BlockCompressor;
@@ -20,15 +22,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 
-public class PeatizedBlocks implements IInitBase {
+@ModInitModule(modid = PeatizedMod.MODID)
+public class PeatizedBlocks implements IModModule {
 	public static Block bogDirt = new BlockBogDirt(Material.ground, false).setCreativeTab(PeatizedMod.tab)
 			.setBlockName("peatized.bogDirt").setHardness(0.5F).setStepSound(Block.soundTypeGravel);
 	public static Block bogDirtGenerated = new BlockBogDirt(Material.ground, true).setCreativeTab(PeatizedMod.tab)
 			.setBlockName("peatized.bogDirt").setHardness(0.5F).setStepSound(Block.soundTypeGravel);
 	public static Block compressor = new BlockCompressor(false).setStepSound(Block.soundTypeStone)
 			.setBlockName("peatized.compressor").setBlockTextureName("stone").setCreativeTab(PeatizedMod.tab);
-	public static Block compressorLit = new BlockCompressor(false).setLightLevel(0.875F).setStepSound(Block.soundTypeStone)
-			.setBlockName("peatized.compressor").setBlockTextureName("stone");
+	public static Block compressorLit = new BlockCompressor(false).setLightLevel(0.875F)
+			.setStepSound(Block.soundTypeStone).setBlockName("peatized.compressor").setBlockTextureName("stone");
 	public static Block peat = new BlockPeat().setBlockName("peatized.peat").setStepSound(Block.soundTypeStone)
 			.setHardness(1.5F).setResistance(10.0F);
 	public static Block peatSlab = new BlockPeatSlab(false).setBlockName("peatized.peatSlab")
@@ -63,5 +66,15 @@ public class PeatizedBlocks implements IInitBase {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
+	}
+
+	@Override
+	public String getModuleName() {
+		return "Blocks";
+	}
+
+	@Override
+	public int getPriority() {
+		return 0;
 	}
 }

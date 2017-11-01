@@ -3,8 +3,8 @@ package mjaroslav.mcmods.peatized.common.command;
 import java.util.List;
 
 import mjaroslav.mcmods.peatized.PeatizedMod;
+import mjaroslav.mcmods.peatized.common.init.NetworkHandler;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
-import mjaroslav.mcmods.peatized.common.network.NetworkHandler;
 import mjaroslav.mcmods.peatized.common.network.PacketCompressingRecipes;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;

@@ -1,7 +1,5 @@
 package mjaroslav.mcmods.peatized;
 
-import java.util.ArrayList;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,22 +7,16 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import mjaroslav.mcmods.mjutils.common.objects.ModInitHandler;
 import mjaroslav.mcmods.peatized.common.PeatizedCommonProxy;
 import mjaroslav.mcmods.peatized.common.command.CompressorRecipesReloadCommand;
 import mjaroslav.mcmods.peatized.common.config.PeatizedConfig;
 import mjaroslav.mcmods.peatized.common.creativetab.PeatizedTab;
-import mjaroslav.mcmods.peatized.common.init.IInitBase;
-import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
-import mjaroslav.mcmods.peatized.common.init.PeatizedCrafts;
-import mjaroslav.mcmods.peatized.common.init.PeatizedEvents;
-import mjaroslav.mcmods.peatized.common.init.PeatizedIntegration;
-import mjaroslav.mcmods.peatized.common.init.PeatizedItems;
-import mjaroslav.mcmods.peatized.common.init.PeatizedWorldGen;
-import mjaroslav.mcmods.peatized.common.network.NetworkHandler;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.common.util.EnumHelper;
 
@@ -43,34 +35,35 @@ public class PeatizedMod {
 	public static final Logger log = LogManager.getLogger(NAME);
 
 	@SidedProxy(clientSide = CLIENTPROXY, serverSide = SERVERPROXY)
-	public static PeatizedCommonProxy proxyModule = new PeatizedCommonProxy();
+	public static PeatizedCommonProxy proxy = new PeatizedCommonProxy();
 
 	public static PeatizedTab tab = new PeatizedTab(MODID);
 	
 	public static ToolMaterial rena = EnumHelper.addToolMaterial("rena", 4, 2500, 9.0F, 4.0F, 30);
 
-	public static ArrayList<IInitBase> modules = new ArrayList<IInitBase>();
-
+	public static PeatizedConfig config = new PeatizedConfig();
+	
+	public static ModInitHandler initHandler = new ModInitHandler(MODID);
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		instance = this;
-		for (IInitBase base : modules)
-			base.preInit(event);
-		proxyModule.preInit(event);
+		this.config.preInit(event);
+		this.initHandler.preInit(event);
+		this.proxy.preInit(event);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		for (IInitBase base : modules)
-			base.init(event);
-		proxyModule.init(event);
+		this.config.init(event);
+		this.initHandler.init(event);
+		this.proxy.init(event);
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		for (IInitBase base : modules)
-			base.postInit(event);
-		proxyModule.postInit(event);
+		this.config.postInit(event);
+		this.initHandler.postInit(event);
+		this.proxy.postInit(event);
 	}
 
 	@EventHandler
@@ -78,14 +71,8 @@ public class PeatizedMod {
 		event.registerServerCommand(new CompressorRecipesReloadCommand());
 	}
 
-	static {
-		modules.add(new PeatizedConfig());
-		modules.add(new PeatizedBlocks());
-		modules.add(new PeatizedItems());
-		modules.add(new PeatizedCrafts());
-		modules.add(new PeatizedEvents());
-		modules.add(new PeatizedWorldGen());
-		modules.add(new PeatizedIntegration());
-		modules.add(new NetworkHandler());
+	@EventHandler
+	public void constr(FMLConstructionEvent event) {
+		this.initHandler.findModules(event);
 	}
 }

@@ -8,6 +8,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import mjaroslav.mcmods.peatized.PeatizedMod;
+import mjaroslav.mcmods.peatized.common.init.NetworkHandler;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

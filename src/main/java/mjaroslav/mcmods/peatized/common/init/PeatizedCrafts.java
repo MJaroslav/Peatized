@@ -4,13 +4,17 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import mjaroslav.mcmods.mjutils.common.objects.IModModule;
+import mjaroslav.mcmods.mjutils.common.objects.ModInitModule;
+import mjaroslav.mcmods.peatized.PeatizedMod;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
 import mjaroslav.mcmods.peatized.common.utils.PeatizedFuelHandler;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class PeatizedCrafts implements IInitBase {
+@ModInitModule(modid = PeatizedMod.MODID)
+public class PeatizedCrafts implements IModModule {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 	}
@@ -45,5 +49,15 @@ public class PeatizedCrafts implements IInitBase {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(PeatizedBlocks.peat, 8, 1), "BBB", "BPB", "BBB", 'B',
 				new ItemStack(Blocks.stonebrick, 1, 3), 'P', "platePeat"));
 		CompressorRecipes.readFromConfig();
+	}
+
+	@Override
+	public String getModuleName() {
+		return "Crafts";
+	}
+
+	@Override
+	public int getPriority() {
+		return 2;
 	}
 }

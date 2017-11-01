@@ -11,9 +11,9 @@ public abstract class AbstractPacket<REQ extends IMessage> implements IMessage, 
 	@Override
 	public REQ onMessage(final REQ message, final MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
-			this.handleServerSide(message, PeatizedMod.proxyModule.getEntityPlayer(ctx));
+			this.handleServerSide(message, PeatizedMod.proxy.getEntityPlayer(ctx));
 		} else {
-			this.handleClientSide(message, PeatizedMod.proxyModule.getEntityPlayer(ctx));
+			this.handleClientSide(message, PeatizedMod.proxy.getEntityPlayer(ctx));
 		}
 		return null;
 	}

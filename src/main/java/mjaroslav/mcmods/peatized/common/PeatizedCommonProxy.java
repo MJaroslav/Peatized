@@ -5,12 +5,14 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import mjaroslav.mcmods.peatized.common.init.IInitBase;
+import mjaroslav.mcmods.mjutils.common.objects.ProxyBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class PeatizedCommonProxy implements IInitBase {
+public class PeatizedCommonProxy extends ProxyBase {
 	public static final int riCompressor = RenderingRegistry.getNextAvailableRenderId();
 
+	@Override
 	public EntityPlayer getEntityPlayer(MessageContext ctx) {
 		return ctx.getServerHandler().playerEntity;
 	}
@@ -27,6 +29,12 @@ public class PeatizedCommonProxy implements IInitBase {
 	public void postInit(FMLPostInitializationEvent event) {
 	}
 
-	public void spawnParticle(String string, double x, double y, double z, Object... args) {	
+	@Override
+	public void spawnParticle(String string, double x, double y, double z, Object... args) {
+	}
+
+	@Override
+	public Minecraft getMinecraft() {
+		return null;
 	}
 }

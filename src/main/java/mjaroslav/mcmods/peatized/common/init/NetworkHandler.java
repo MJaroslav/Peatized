@@ -1,4 +1,4 @@
-package mjaroslav.mcmods.peatized.common.network;
+package mjaroslav.mcmods.peatized.common.init;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -7,12 +7,16 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
+import mjaroslav.mcmods.mjutils.common.objects.IModModule;
+import mjaroslav.mcmods.mjutils.common.objects.ModInitModule;
 import mjaroslav.mcmods.peatized.PeatizedMod;
-import mjaroslav.mcmods.peatized.common.init.IInitBase;
+import mjaroslav.mcmods.peatized.common.network.LocationDoublePacket;
+import mjaroslav.mcmods.peatized.common.network.PacketCompressingRecipes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
-public class NetworkHandler implements IInitBase {
+@ModInitModule(modid = PeatizedMod.MODID)
+public class NetworkHandler implements IModModule {
 	public static final NetworkHandler INSTANCE = new NetworkHandler();
 	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(PeatizedMod.MODID);
 	private static int dec = 0;
@@ -55,5 +59,15 @@ public class NetworkHandler implements IInitBase {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
+	}
+
+	@Override
+	public String getModuleName() {
+		return "Network";
+	}
+
+	@Override
+	public int getPriority() {
+		return 4;
 	}
 }

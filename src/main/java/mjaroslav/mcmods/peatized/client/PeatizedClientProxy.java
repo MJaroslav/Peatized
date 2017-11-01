@@ -25,7 +25,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 public class PeatizedClientProxy extends PeatizedCommonProxy {
-	public Minecraft minecraft = Minecraft.getMinecraft();
+	@Override
+	public Minecraft getMinecraft() {
+		return Minecraft.getMinecraft();
+	}
 
 	@Override
 	public EntityPlayer getEntityPlayer(MessageContext ctx) {
