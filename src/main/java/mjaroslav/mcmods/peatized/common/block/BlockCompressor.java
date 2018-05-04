@@ -5,7 +5,7 @@ import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mjaroslav.mcmods.peatized.PeatizedMod;
+import mjaroslav.mcmods.peatized.ModPeatized;
 import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
 import mjaroslav.mcmods.peatized.common.tileentity.TileCompressor;
 import mjaroslav.mcmods.peatized.common.tileentity.TileFuelCompressor;
@@ -112,7 +112,7 @@ public class BlockCompressor extends Block implements ITileEntityProvider {
 					break;
 				}
 				if (guiId != -1) {
-					player.openGui(PeatizedMod.instance, guiId, world, x, y, z);
+					player.openGui(ModPeatized.instance, guiId, world, x, y, z);
 					return true;
 				}
 			}

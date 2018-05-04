@@ -3,7 +3,7 @@ package mjaroslav.mcmods.peatized.common.block;
 import java.util.List;
 import java.util.Random;
 
-import mjaroslav.mcmods.peatized.PeatizedMod;
+import mjaroslav.mcmods.peatized.ModPeatized;
 import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
@@ -19,7 +19,7 @@ public class BlockPeatSlab extends BlockSlab {
 	public BlockPeatSlab(boolean isDouble) {
 		super(isDouble, Material.rock);
 		useNeighborBrightness = true;
-		setCreativeTab(PeatizedMod.tab);
+		setCreativeTab(ModPeatized.tab);
 	}
 
 	@Override
