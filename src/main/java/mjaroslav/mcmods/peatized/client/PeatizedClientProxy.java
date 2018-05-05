@@ -8,6 +8,7 @@ import mjaroslav.mcmods.peatized.client.render.item.ItemBlockCompressorRenderer;
 import mjaroslav.mcmods.peatized.client.render.item.ItemCleaverRenderer;
 import mjaroslav.mcmods.peatized.client.render.tileentity.TileCompressorRenderer;
 import mjaroslav.mcmods.peatized.common.PeatizedCommonProxy;
+import mjaroslav.mcmods.peatized.common.event.EventHandlerRender;
 import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
 import mjaroslav.mcmods.peatized.common.init.PeatizedItems;
 import mjaroslav.mcmods.peatized.common.tileentity.*;
@@ -17,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 public class PeatizedClientProxy extends PeatizedCommonProxy {
     @Override
@@ -46,6 +48,8 @@ public class PeatizedClientProxy extends PeatizedCommonProxy {
         rendererItem(PeatizedItems.cleaverDiamond, new ItemCleaverRenderer());
         rendererItem(PeatizedItems.cleaverGold, new ItemCleaverRenderer());
         rendererItem(PeatizedItems.cleaverRena, new ItemCleaverRenderer());
+        rendererItem(PeatizedItems.cleaverBronze, new ItemCleaverRenderer());
+        MinecraftForge.EVENT_BUS.register(new EventHandlerRender());
     }
 
     @Override

@@ -10,8 +10,6 @@ import cpw.mods.fml.common.event.*;
 import mjaroslav.mcmods.mjutils.lib.module.*;
 import mjaroslav.mcmods.peatized.common.command.CompressorRecipesReloadCommand;
 import mjaroslav.mcmods.peatized.common.creativetab.PeatizedTab;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraftforge.common.util.EnumHelper;
 
 @Mod(modid = MODID, name = NAME, version = VERSION, guiFactory = GUIFACTORY, dependencies = DEPENDENCIES)
 public class ModPeatized {
@@ -22,8 +20,6 @@ public class ModPeatized {
     public static ProxyBase proxy;
 
     public static PeatizedTab tab = new PeatizedTab(MODID);
-
-    public static ToolMaterial rena = EnumHelper.addToolMaterial("rena", 4, 2500, 9.0F, 4.0F, 30);
 
     public static ConfigurationHandler config = new ConfigurationHandler(MODID, LOG);
     public static ModuleHandler moduleHandler;

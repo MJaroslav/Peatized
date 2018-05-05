@@ -52,6 +52,15 @@ public class PeatizedCrafts implements IModule {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(PeatizedBlocks.peat, 8, 1), "BBB", "BPB", "BBB", 'B',
                 new ItemStack(Blocks.stonebrick, 1, 3), 'P', "platePeat"));
         CompressorRecipes.readFromConfig();
+        GameRegistry.addRecipe(
+                new ShapedOreRecipe(PeatizedItems.cleaverIron, "MM", "M ", "S ", 'M', "ingotIron", 'S', "stickWood"));
+        GameRegistry.addRecipe(
+                new ShapedOreRecipe(PeatizedItems.cleaverGold, "MM", "M ", "S ", 'M', "ingotGold", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PeatizedItems.cleaverDiamond, "MM", "M ", "S ", 'M', "gemDiamond",
+                'S', "stickWood"));
+        if (OreDictionary.doesOreNameExist("ingotBronze"))
+            GameRegistry.addRecipe(new ShapedOreRecipe(PeatizedItems.cleaverBronze, "MM", "M ", "S ", 'M',
+                    "ingotBronze", 'S', "stickWood"));
         UtilsFuel.addFuel(new ItemStack(PeatizedItems.resource, 1, 0), 1F);
         UtilsFuel.addFuel(new ItemStack(PeatizedItems.resource, 1, 1), 10F);
         UtilsFuel.addFuel(new ItemStack(PeatizedItems.resource, 1, 2), 2.5F);

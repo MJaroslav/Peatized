@@ -4,12 +4,14 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
+import mjaroslav.mcmods.mjutils.lib.utils.UtilsGame;
 import mjaroslav.mcmods.peatized.common.item.ItemCleaver;
+import mjaroslav.mcmods.peatized.lib.CategoryGeneralInfo.CategoryCleaversInfo;
 import mjaroslav.mcmods.peatized.lib.CategoryGeneralInfo.CategoryGraphicsInfo;
 import mjaroslav.mcmods.peatized.lib.ModInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -19,9 +21,6 @@ import net.minecraftforge.client.model.IModelCustom;
 
 public class ItemCleaverRenderer implements IItemRenderer {
     public static final IModelCustom model = AdvancedModelLoader
-            .loadModel(new ResourceLocation(ModInfo.MODID, "models/cleaver.obj"));
-
-    public static final IModelCustom modelSecond = AdvancedModelLoader
             .loadModel(new ResourceLocation(ModInfo.MODID, "models/cleaver.obj"));
 
     public static ResourceLocation textureBase = new ResourceLocation(ModInfo.MODID,
@@ -97,27 +96,27 @@ public class ItemCleaverRenderer implements IItemRenderer {
         }
         GL11.glPushMatrix();
         Minecraft.getMinecraft().renderEngine.bindTexture(textureBlade);
-        int intColor = ((ItemCleaver) item.getItem()).getBladeColor();
-        if (intColor != 16777215) {
-            Color color = new Color(intColor);
-            GL11.glColor3d(color.getRed(), color.getGreen(), color.getBlue());
-        }
+        Color color = ((ItemCleaver) item.getItem()).getBladeColor();
+        if (!color.equals(Color.white))
+            GL11.glColor3d(color.getRed() / 255D, color.getGreen() / 255D, color.getBlue() / 255D);
         model.renderPart("blade");
+        GL11.glPopMatrix();
         short value = 0;
-        if (item.hasTagCompound() && item.getTagCompound().hasKey("blood") && entityClientPlayerMP != null)
-            value = (short) (item.getTagCompound().getLong("blood")
-                    - entityClientPlayerMP.worldObj.getTotalWorldTime());
-        if (CategoryGraphicsInfo.renderBlood && value > 0) {
+        if (entityClientPlayerMP != null && ItemCleaver.hasBlood(item))
+            value = (short) (ItemCleaver.getBlood(item) - entityClientPlayerMP.worldObj.getTotalWorldTime());
+        if ((CategoryGraphicsInfo.renaAlwaysBlood && ItemCleaver.isEaster(item))
+                || CategoryGraphicsInfo.renderBlood && value > 0) {
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glColor4d(1D, 1D, 1D, (double) value / 200);
+            if (!CategoryGraphicsInfo.renaAlwaysBlood || !ItemCleaver.isEaster(item))
+                GL11.glColor4d(1D, 1D, 1D,
+                        (double) value / UtilsGame.getTicksFromSeconds(CategoryCleaversInfo.bloodTime));
             Minecraft.getMinecraft().renderEngine
                     .bindTexture(CategoryGraphicsInfo.altBlood ? textureBloodAlt : textureBlood);
-            modelSecond.renderPart("blade");
+            model.renderPart("blade");
             GL11.glPopMatrix();
         }
-        GL11.glPopMatrix();
         GL11.glPushMatrix();
         GL11.glColor3d(256, 256, 256);
         Minecraft.getMinecraft().renderEngine.bindTexture(textureBase);
@@ -140,14 +139,14 @@ public class ItemCleaverRenderer implements IItemRenderer {
             float f9 = (float) (Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
             GL11.glTranslatef(f9, 0.0F, 0.0F);
             GL11.glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
-            modelSecond.renderAll();
+            model.renderAll();
             GL11.glPopMatrix();
             GL11.glPushMatrix();
             GL11.glScalef(f8, f8, f8);
             f9 = (float) (Minecraft.getSystemTime() % 4873L) / 4873.0F * 8.0F;
             GL11.glTranslatef(-f9, 0.0F, 0.0F);
             GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
-            modelSecond.renderAll();
+            model.renderAll();
             GL11.glPopMatrix();
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
             GL11.glDisable(GL11.GL_BLEND);
