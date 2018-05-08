@@ -22,7 +22,7 @@ public class GuiCompressor extends GuiContainer {
             ModInfo.MODID + ":textures/gui/container/compressor.png");
     private ICompressor tile;
 
-    public GuiCompressor(InventoryPlayer player, TileCompressor tile) {
+    public GuiCompressor(InventoryPlayer player, TileBaseCompressor tile) {
         super(new ContainerCompressor(player, tile));
         this.tile = tile;
     }
@@ -78,35 +78,15 @@ public class GuiCompressor extends GuiContainer {
         s = ((IInventory) tile).hasCustomInventoryName() ? ((IInventory) tile).getInventoryName()
                 : I18n.format(((IInventory) tile).getInventoryName(), new Object[0]);
         this.fontRendererObj.drawString(s, 6, 6, 4210752);
-        if (tile instanceof TileCompressor)
-            drawGuiContainerForegroundLayerForCompressor((TileCompressor) tile, x, y);
-        if (tile instanceof TileRFCompressor)
-            drawGuiContainerForegroundLayerForRFCompressor((TileRFCompressor) tile, x, y);
+        if (tile instanceof TileBaseCompressor)
+            fgBase((TileBaseCompressor) tile, x, y);
         if (tile instanceof TileFuelCompressor)
-            drawGuiContainerForegroundLayerForFuelCompressor((TileFuelCompressor) tile, x, y);
+            fgFuel((TileFuelCompressor) tile, x, y);
+        if (tile instanceof TileRFCompressor)
+            fgRF((TileRFCompressor) tile, x, y);
     }
 
-    protected void drawGuiContainerForegroundLayerForFuelCompressor(TileFuelCompressor tile, int x, int y) {
-        if (this.tile.getCompressor().canWork() && tile.hasFuel())
-            this.drawHoveringText(x, y, 162, 72, 7, 7, this.fontRendererObj,
-                    new String[] { StatCollector.translateToLocal("container.compressor.ready") });
-        this.drawHoveringText(x, y, 162, 62, 7, 7, this.fontRendererObj,
-                new String[] { StatCollector.translateToLocal("container.compressor.info.fuel") });
-        if (!tile.hasFuel())
-            this.drawHoveringText(x, y, 162, 52, 7, 7, this.fontRendererObj,
-                    new String[] { StatCollector.translateToLocal("container.compressor.noFuel") });
-        if (this.tile.getCompressor().inventory[0] == null
-                || CompressorRecipes.compressing().getCompressingResult(this.tile.getCompressor().inventory[0]) == null
-                || CompressorRecipes.compressing().getStackSizeForCompressing(
-                        this.tile.getCompressor().inventory[0]) > this.tile.getCompressor().inventory[0].stackSize)
-            this.drawHoveringText(x, y, 162, 42, 7, 7, this.fontRendererObj,
-                    new String[] { StatCollector.translateToLocal("container.compressor.noRecipe") });
-        if (this.tile.getCompressor().inventoryFull())
-            this.drawHoveringText(x, y, 162, 32, 7, 7, this.fontRendererObj,
-                    new String[] { StatCollector.translateToLocal("container.compressor.inventoryFull") });
-    }
-
-    protected void drawGuiContainerForegroundLayerForCompressor(TileCompressor tile, int x, int y) {
+    protected void fgBase(TileBaseCompressor tile, int x, int y) {
         if (tile.getCompressor().canWork() && tile.hasPlate)
             this.drawHoveringText(x, y, 162, 72, 7, 7, this.fontRendererObj,
                     new String[] { StatCollector.translateToLocal("container.compressor.ready") });
@@ -127,7 +107,27 @@ public class GuiCompressor extends GuiContainer {
                     new String[] { StatCollector.translateToLocal("container.compressor.inventoryFull") });
     }
 
-    protected void drawGuiContainerForegroundLayerForRFCompressor(TileRFCompressor tile, int x, int y) {
+    protected void fgFuel(TileFuelCompressor tile, int x, int y) {
+        if (this.tile.getCompressor().canWork() && tile.hasFuel())
+            this.drawHoveringText(x, y, 162, 72, 7, 7, this.fontRendererObj,
+                    new String[] { StatCollector.translateToLocal("container.compressor.ready") });
+        this.drawHoveringText(x, y, 162, 62, 7, 7, this.fontRendererObj,
+                new String[] { StatCollector.translateToLocal("container.compressor.info.fuel") });
+        if (!tile.hasFuel())
+            this.drawHoveringText(x, y, 162, 52, 7, 7, this.fontRendererObj,
+                    new String[] { StatCollector.translateToLocal("container.compressor.noFuel") });
+        if (this.tile.getCompressor().inventory[0] == null
+                || CompressorRecipes.compressing().getCompressingResult(this.tile.getCompressor().inventory[0]) == null
+                || CompressorRecipes.compressing().getStackSizeForCompressing(
+                        this.tile.getCompressor().inventory[0]) > this.tile.getCompressor().inventory[0].stackSize)
+            this.drawHoveringText(x, y, 162, 42, 7, 7, this.fontRendererObj,
+                    new String[] { StatCollector.translateToLocal("container.compressor.noRecipe") });
+        if (this.tile.getCompressor().inventoryFull())
+            this.drawHoveringText(x, y, 162, 32, 7, 7, this.fontRendererObj,
+                    new String[] { StatCollector.translateToLocal("container.compressor.inventoryFull") });
+    }
+
+    protected void fgRF(TileRFCompressor tile, int x, int y) {
         if (this.tile.getCompressor().canWork() && tile.hasEnergy())
             this.drawHoveringText(x, y, 162, 72, 7, 7, this.fontRendererObj,
                     new String[] { StatCollector.translateToLocal("container.compressor.ready") });
@@ -161,16 +161,38 @@ public class GuiCompressor extends GuiContainer {
             this.drawTexturedModalRect(xZero + 162, yZero + 32, 197, 48, 7, 7);
         else
             this.drawTexturedModalRect(xZero + 162, yZero + 32, 190, 48, 7, 7);
-        if (tile instanceof TileCompressor)
-            drawGuiContainerBackgroundLayerForCompressor((TileCompressor) tile, size, x, y, xZero, yZero);
-        if (tile instanceof TileRFCompressor)
-            drawGuiContainerBackgroundLayerForRFCompressor((TileRFCompressor) tile, size, x, y, xZero, yZero);
+        if (tile instanceof TileBaseCompressor)
+            bgBase((TileBaseCompressor) tile, size, x, y, xZero, yZero);
         if (tile instanceof TileFuelCompressor)
-            drawGuiContainerBackgroundLayerForFuelCompressor((TileFuelCompressor) tile, size, x, y, xZero, yZero);
+            bgFuel((TileFuelCompressor) tile, size, x, y, xZero, yZero);
+        if (tile instanceof TileRFCompressor)
+            bgRF((TileRFCompressor) tile, size, x, y, xZero, yZero);
     }
 
-    public void drawGuiContainerBackgroundLayerForFuelCompressor(TileFuelCompressor tile, float size, int x, int y,
-            int xZero, int yZero) {
+    public void bgBase(TileBaseCompressor tile, float size, int x, int y, int xZero, int yZero) {
+        if (this.tile.getCompressor().inventory[0] == null
+                || CompressorRecipes.compressing().getCompressingResult(this.tile.getCompressor().inventory[0]) == null
+                || CompressorRecipes.compressing().getStackSizeForCompressing(
+                        this.tile.getCompressor().inventory[0]) > this.tile.getCompressor().inventory[0].stackSize
+                || CompressorRecipes.compressing().isAutomatic(tile.getCompressor().inventory[0]))
+            this.drawTexturedModalRect(xZero + 162, yZero + 42, 190, 48, 7, 7);
+        else
+            this.drawTexturedModalRect(xZero + 162, yZero + 42, 197, 48, 7, 7);
+        if (this.tile.getCompressor().isWorking()) {
+            int i1 = tile.getScaleForProgressTime(48);
+            this.drawTexturedModalRect(xZero + 109, yZero + 19, 176, 0, 48, i1);
+        }
+        if (this.tile.getCompressor().canWork() && tile.hasPlate)
+            this.drawTexturedModalRect(xZero + 162, yZero + 72, 211, 48, 7, 7);
+        else
+            this.drawTexturedModalRect(xZero + 162, yZero + 72, 218, 48, 7, 7);
+        if (tile.hasPlate)
+            this.drawTexturedModalRect(xZero + 162, yZero + 52, 197, 48, 7, 7);
+        else
+            this.drawTexturedModalRect(xZero + 162, yZero + 52, 176, 48, 7, 7);
+    }
+
+    public void bgFuel(TileFuelCompressor tile, float size, int x, int y, int xZero, int yZero) {
         if (this.tile.getCompressor().inventory[0] == null
                 || CompressorRecipes.compressing().getCompressingResult(this.tile.getCompressor().inventory[0]) == null
                 || CompressorRecipes.compressing().getStackSizeForCompressing(
@@ -195,32 +217,7 @@ public class GuiCompressor extends GuiContainer {
             this.drawTexturedModalRect(xZero + 162, yZero + 52, 176, 48, 7, 7);
     }
 
-    public void drawGuiContainerBackgroundLayerForCompressor(TileCompressor tile, float size, int x, int y, int xZero,
-            int yZero) {
-        if (this.tile.getCompressor().inventory[0] == null
-                || CompressorRecipes.compressing().getCompressingResult(this.tile.getCompressor().inventory[0]) == null
-                || CompressorRecipes.compressing().getStackSizeForCompressing(
-                        this.tile.getCompressor().inventory[0]) > this.tile.getCompressor().inventory[0].stackSize
-                || CompressorRecipes.compressing().isAutomatic(tile.getCompressor().inventory[0]))
-            this.drawTexturedModalRect(xZero + 162, yZero + 42, 190, 48, 7, 7);
-        else
-            this.drawTexturedModalRect(xZero + 162, yZero + 42, 197, 48, 7, 7);
-        if (this.tile.getCompressor().isWorking()) {
-            int i1 = tile.getScaleForProgressTime(48);
-            this.drawTexturedModalRect(xZero + 109, yZero + 19, 176, 0, 48, i1);
-        }
-        if (this.tile.getCompressor().canWork() && tile.hasPlate)
-            this.drawTexturedModalRect(xZero + 162, yZero + 72, 211, 48, 7, 7);
-        else
-            this.drawTexturedModalRect(xZero + 162, yZero + 72, 218, 48, 7, 7);
-        if (tile.hasPlate)
-            this.drawTexturedModalRect(xZero + 162, yZero + 52, 197, 48, 7, 7);
-        else
-            this.drawTexturedModalRect(xZero + 162, yZero + 52, 176, 48, 7, 7);
-    }
-
-    public void drawGuiContainerBackgroundLayerForRFCompressor(TileRFCompressor tile, float size, int x, int y,
-            int xZero, int yZero) {
+    public void bgRF(TileRFCompressor tile, float size, int x, int y, int xZero, int yZero) {
         if (this.tile.getCompressor().inventory[0] == null
                 || CompressorRecipes.compressing().getCompressingResult(this.tile.getCompressor().inventory[0]) == null
                 || CompressorRecipes.compressing().getStackSizeForCompressing(

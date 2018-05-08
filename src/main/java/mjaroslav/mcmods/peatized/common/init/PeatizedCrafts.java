@@ -33,7 +33,7 @@ public class PeatizedCrafts implements IModule {
                 new ItemStack(Blocks.double_stone_slab, 1, 8));
         GameRegistry.addShapelessRecipe(new ItemStack(Blocks.stone_slab, 2, 1),
                 new ItemStack(Blocks.double_stone_slab, 1, 9));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(PeatizedBlocks.compressor, 1, 0), "CPC", "CHC", "COC",
+       /* GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(PeatizedBlocks.compressor, 1, 0), "CPC", "CHC", "COC",
                 'C', "cobblestone", 'P', Blocks.piston, 'H', Blocks.hopper, 'O', Blocks.obsidian));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(PeatizedItems.resource, 1, 3), " C ", "CSC", " C ",
                 'C', "cobblestone", 'S', "stone"));
@@ -42,7 +42,7 @@ public class PeatizedCrafts implements IModule {
                 "gearStone", 'B', new ItemStack(PeatizedBlocks.compressor, 1, 0)));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(PeatizedBlocks.compressor, 1, 2), "CHC", "rFr", "GBG",
                 'C', "cobblestone", 'H', Blocks.hopper, 'r', "dustRedstone", 'G', "gearStone", 'F', Blocks.furnace, 'B',
-                new ItemStack(PeatizedBlocks.compressor, 1, 0)));
+                new ItemStack(PeatizedBlocks.compressor, 1, 0)));*/
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(PeatizedBlocks.peat, 8, 0), "BBB", "BPB", "BBB", 'B',
                 new ItemStack(Blocks.stonebrick, 1, 0), 'P', "platePeat"));
         GameRegistry.addShapedRecipe(new ItemStack(PeatizedBlocks.peatStairs, 4, 0), "B  ", "BB ", "BBB", 'B',

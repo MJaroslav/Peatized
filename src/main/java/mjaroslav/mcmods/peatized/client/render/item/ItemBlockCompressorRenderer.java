@@ -3,7 +3,6 @@ package mjaroslav.mcmods.peatized.client.render.item;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import mjaroslav.mcmods.peatized.client.render.tileentity.TileCompressorRenderer;
 import mjaroslav.mcmods.peatized.lib.ModInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -41,7 +40,7 @@ public class ItemBlockCompressorRenderer implements IItemRenderer {
         else
             GL11.glTranslated(0, 1, 0);
         GL11.glRotated(180, 0, 0, 1);
-        TileCompressorRenderer.model.render();
+        // TileCompressorRenderer.model.render();
         GL11.glPopMatrix();
     }
 }

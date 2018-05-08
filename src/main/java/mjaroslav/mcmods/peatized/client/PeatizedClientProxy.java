@@ -4,19 +4,16 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
-import mjaroslav.mcmods.peatized.client.render.item.ItemBlockCompressorRenderer;
 import mjaroslav.mcmods.peatized.client.render.item.ItemCleaverRenderer;
-import mjaroslav.mcmods.peatized.client.render.tileentity.TileCompressorRenderer;
+import mjaroslav.mcmods.peatized.client.render.tileentity.*;
 import mjaroslav.mcmods.peatized.common.PeatizedCommonProxy;
 import mjaroslav.mcmods.peatized.common.event.EventHandlerRender;
-import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
 import mjaroslav.mcmods.peatized.common.init.PeatizedItems;
 import mjaroslav.mcmods.peatized.common.tileentity.*;
 import mjaroslav.mcmods.peatized.lib.CategoryGeneralInfo;
 import mjaroslav.mcmods.peatized.lib.ModInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -37,11 +34,6 @@ public class PeatizedClientProxy extends PeatizedCommonProxy {
 
     @Override
     public void init(FMLInitializationEvent event) {
-        rendererTileEntity(TileCompressor.class, new TileCompressorRenderer(ModInfo.MODID, "compressor", false));
-        rendererItem(Item.getItemFromBlock(PeatizedBlocks.compressor), new ItemBlockCompressorRenderer());
-        rendererTileEntity(TileRFCompressor.class, new TileCompressorRenderer(ModInfo.MODID, "compressor_rf", false));
-        rendererTileEntity(TileFuelCompressor.class,
-                new TileCompressorRenderer(ModInfo.MODID, "compressor_fuel", true));
         VillagerRegistry.instance().registerVillagerSkin(CategoryGeneralInfo.villagerId,
                 new ResourceLocation(ModInfo.MODID, "textures/entity/villager/peatman.png"));
         rendererItem(PeatizedItems.cleaverIron, new ItemCleaverRenderer());
@@ -50,6 +42,10 @@ public class PeatizedClientProxy extends PeatizedCommonProxy {
         rendererItem(PeatizedItems.cleaverRena, new ItemCleaverRenderer());
         rendererItem(PeatizedItems.cleaverBronze, new ItemCleaverRenderer());
         MinecraftForge.EVENT_BUS.register(new EventHandlerRender());
+        rendererTileEntity(TileUpa.class, new TileUpaRenderer());
+        rendererTileEntity(TileBaseCompressor.class, new TileBaseComressorRenderer());
+        rendererTileEntity(TileFuelCompressor.class, new TileFuelCompressorRenderer());
+        rendererTileEntity(TileRFCompressor.class, new TileRFCompressorRenderer());
     }
 
     @Override
