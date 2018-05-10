@@ -7,12 +7,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mjaroslav.mcmods.mjutils.lib.utils.UtilsGame;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
+import mjaroslav.mcmods.peatized.lib.NBTInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -47,12 +47,11 @@ public class TileBaseCompressor extends TileEntity implements ISidedInventory, I
                 }
             }
             if (this.hasPlate) {
-                boolean flag1 = false;
                 boolean isPressed = false;
                 if (this.worldObj.getBlockMetadata(this.xCoord, this.yCoord + 1, this.zCoord) > 0) {
                     if (!this.platePressed) {
                         this.platePressed = true;
-                        flag1 = true;
+                        flag = true;
                         isPressed = true;
                         this.worldObj.playSoundEffect((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D,
                                 (double) this.zCoord + 0.5D, "tile.piston.out", 0.5F,
@@ -61,44 +60,46 @@ public class TileBaseCompressor extends TileEntity implements ISidedInventory, I
                 } else {
                     if (this.platePressed) {
                         this.platePressed = false;
-                        flag1 = true;
+                        flag = true;
                         this.worldObj.playSoundEffect((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D,
                                 (double) this.zCoord + 0.5D, "tile.piston.in", 0.5F,
                                 this.worldObj.rand.nextFloat() * 0.15F + 0.6F);
                     }
                 }
                 if (isPressed) {
-                    if (this.compressor.currentJumps == 0 && this.compressor.canWork()) {
-                        this.compressor.jumps = CompressorRecipes.compressing().getJumps(this.compressor.inventory[0]);
-                        if (this.compressor.jumps == 1) {
-                            this.compressor.currentJumps = 0;
-                            this.compressor.jumps = 0;
+                    if (this.compressor.currentActivations == 0 && this.compressor.canWork()) {
+                        this.compressor.activations = CompressorRecipes.compressing()
+                                .getJumps(this.compressor.inventory[0]);
+                        if (this.compressor.activations == 1) {
+                            this.compressor.currentActivations = 0;
+                            this.compressor.activations = 0;
                             this.compressor.work();
                             flag = true;
                         } else
-                            this.compressor.currentJumps++;
+                            this.compressor.currentActivations++;
                     } else if (this.compressor.isWorking() && this.compressor.canWork()) {
-                        this.compressor.currentJumps++;
-                        if (this.compressor.currentJumps >= this.compressor.jumps) {
-                            this.compressor.currentJumps = 0;
-                            this.compressor.jumps = 0;
+                        this.compressor.currentActivations++;
+                        if (this.compressor.currentActivations >= this.compressor.activations) {
+                            this.compressor.currentActivations = 0;
+                            this.compressor.activations = 0;
                             this.compressor.work();
                             flag = true;
                         }
                     } else {
-                        this.compressor.currentJumps = 0;
-                        this.compressor.jumps = 0;
+                        this.compressor.currentActivations = 0;
+                        this.compressor.activations = 0;
                     }
                 }
 
             }
-            if (!this.compressor.canWork() && (this.compressor.currentJumps > 0 || this.compressor.jumps > 0)) {
-                this.compressor.currentJumps = 0;
-                this.compressor.jumps = 0;
+            if (!this.compressor.canWork()
+                    && (this.compressor.currentActivations > 0 || this.compressor.activations > 0)) {
+                this.compressor.currentActivations = 0;
+                this.compressor.activations = 0;
                 flag = true;
             }
             if (this.compressor.canWork()) {
-                this.compressor.jumps = CompressorRecipes.compressing().getJumps(this.compressor.inventory[0]);
+                this.compressor.activations = CompressorRecipes.compressing().getJumps(this.compressor.inventory[0]);
                 flag = true;
             }
             if (flag) {
@@ -110,7 +111,8 @@ public class TileBaseCompressor extends TileEntity implements ISidedInventory, I
 
     @SideOnly(Side.CLIENT)
     public int getScaleForProgressTime(int size) {
-        return this.compressor.currentJumps * size / (this.compressor.jumps == 0 ? 1 : this.compressor.jumps);
+        return this.compressor.currentActivations * size
+                / (this.compressor.activations == 0 ? 1 : this.compressor.activations);
     }
 
     @Override
@@ -155,13 +157,12 @@ public class TileBaseCompressor extends TileEntity implements ISidedInventory, I
     }
 
     public void readFromNBTS(NBTTagCompound nbt) {
-        NBTTagList nbttaglist = nbt.getTagList("Items", 10);
         this.compressor.readFromNBT(nbt);
-        if (nbt.hasKey("CustomName", 8)) {
-            this.customName = nbt.getString("CustomName");
+        if (nbt.hasKey(NBTInfo.CUSTOM_NAME, 8)) {
+            this.customName = nbt.getString(NBTInfo.CUSTOM_NAME);
         }
-        this.hasPlate = nbt.getBoolean("HasPlate");
-        this.platePressed = nbt.getBoolean("PlatePressed");
+        this.hasPlate = nbt.getBoolean(NBTInfo.PLATE_EXIST);
+        this.platePressed = nbt.getBoolean(NBTInfo.PLATE_PRESSED);
     }
 
     @Override
@@ -173,10 +174,10 @@ public class TileBaseCompressor extends TileEntity implements ISidedInventory, I
     public void writeToNBTS(NBTTagCompound nbt) {
         this.compressor.writeToNBT(nbt);
         if (this.hasCustomInventoryName()) {
-            nbt.setString("CustomName", this.customName);
+            nbt.setString(NBTInfo.CUSTOM_NAME, this.customName);
         }
-        nbt.setBoolean("HasPlate", this.hasPlate);
-        nbt.setBoolean("PlatePressed", this.platePressed);
+        nbt.setBoolean(NBTInfo.PLATE_EXIST, this.hasPlate);
+        nbt.setBoolean(NBTInfo.PLATE_PRESSED, this.platePressed);
     }
 
     @Override

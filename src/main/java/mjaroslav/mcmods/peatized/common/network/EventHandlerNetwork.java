@@ -21,7 +21,7 @@ public class EventHandlerNetwork {
             return;
         EntityPlayer p = event.player;
         CompressorRecipes.readFromConfig();
-        NetworkHandler.INSTANCE.sendTo(new PacketCompressingRecipes(), (EntityPlayerMP) event.player);
+        NetworkHandler.sendTo(new PacketCompressingRecipes(), (EntityPlayerMP) event.player);
         ModInfo.LOG.info("Loading compressor recipes.");
     }
 

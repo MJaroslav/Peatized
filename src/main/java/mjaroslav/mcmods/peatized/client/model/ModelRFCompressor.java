@@ -25,8 +25,8 @@ public class ModelRFCompressor extends ModelBase {
 
     public ModelRFCompressor(float size) {
         this.size = size;
-        this.textureWidth = 76;
-        this.textureHeight = 76;
+        this.textureWidth = 128;
+        this.textureHeight = 128;
         this.pistonHead = new ModelRenderer(this, 0, 67);
         this.pistonHead.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.pistonHead.addBox(-3.5F, 0.0F, -3.5F, 7, 1, 7, 0.0F);

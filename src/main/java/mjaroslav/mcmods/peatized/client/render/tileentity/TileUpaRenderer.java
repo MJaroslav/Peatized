@@ -19,10 +19,10 @@ public class TileUpaRenderer extends TileEntitySpecialRenderer {
             "textures/models/upa/secondary.png");
     public static final ResourceLocation textureLine = new ResourceLocation(ModInfo.MODID,
             "textures/models/upa/line.png");
-    public static final ResourceLocation textureCheek = new ResourceLocation(ModInfo.MODID,
-            "textures/models/upa/cheek.png");
-    public static final ResourceLocation textureEye = new ResourceLocation(ModInfo.MODID,
-            "textures/models/upa/eye.png");
+    public static final ResourceLocation textureCheeks = new ResourceLocation(ModInfo.MODID,
+            "textures/models/upa/cheeks.png");
+    public static final ResourceLocation textureEyes = new ResourceLocation(ModInfo.MODID,
+            "textures/models/upa/eyes.png");
     public static final ResourceLocation textureNose = new ResourceLocation(ModInfo.MODID,
             "textures/models/upa/nose.png");
     public static final ResourceLocation textureFace = new ResourceLocation(ModInfo.MODID,
@@ -43,53 +43,23 @@ public class TileUpaRenderer extends TileEntitySpecialRenderer {
         GL11.glRotated(180, 0, 0, 1);
         GL11.glRotated(((tile.getBlockMetadata() * 360) / 16.0F), 0, 1, 0);
         GL11.glScalef(1F, 1F, 1F);
-        Color color = new Color(tile.mainColor);
+        renderPart(tile.getMainColor(), textureMain);
+        renderPart(tile.getSecondaryColor(), textureSecondary);
+        renderPart(tile.getLineColor(), textureLine);
+        renderPart(tile.getCheeksColor(), textureCheeks);
+        renderPart(tile.getFaceColor(), textureFace);
+        renderPart(tile.getEyesColor(), textureEyes);
+        renderPart(tile.getEarsColor(), textureEars);
+        renderPart(tile.getNoseColor(), textureNose);
+        GL11.glPopMatrix();
+    }
+
+    private void renderPart(int intColor, ResourceLocation texture) {
+        Color color = new Color(intColor);
         GL11.glPushMatrix();
         GL11.glColor3d(color.getRed() / 255D, color.getGreen() / 255D, color.getBlue() / 255D);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(textureMain);
+        FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture);
         model.render();
-        GL11.glPopMatrix();
-        color = new Color(tile.secondaryColor);
-        GL11.glPushMatrix();
-        GL11.glColor3d(color.getRed() / 255D, color.getGreen() / 255D, color.getBlue() / 255D);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(textureSecondary);
-        model.render();
-        GL11.glPopMatrix();
-        color = new Color(tile.lineColor);
-        GL11.glPushMatrix();
-        GL11.glColor3d(color.getRed() / 255D, color.getGreen() / 255D, color.getBlue() / 255D);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(textureLine);
-        model.render();
-        GL11.glPopMatrix();
-        color = new Color(tile.cheekColor);
-        GL11.glPushMatrix();
-        GL11.glColor3d(color.getRed() / 255D, color.getGreen() / 255D, color.getBlue() / 255D);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(textureCheek);
-        model.render();
-        GL11.glPopMatrix();
-        color = new Color(tile.eyeColor);
-        GL11.glPushMatrix();
-        GL11.glColor3d(color.getRed() / 255D, color.getGreen() / 255D, color.getBlue() / 255D);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(textureEye);
-        model.render();
-        GL11.glPopMatrix();
-        color = new Color(tile.noseColor);
-        GL11.glPushMatrix();
-        GL11.glColor3d(color.getRed() / 255D, color.getGreen() / 255D, color.getBlue() / 255D);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(textureNose);
-        model.render();
-        GL11.glPopMatrix();
-        color = new Color(tile.earsColor);
-        GL11.glPushMatrix();
-        GL11.glColor3d(color.getRed() / 255D, color.getGreen() / 255D, color.getBlue() / 255D);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(textureEars);
-        model.render();
-        GL11.glPopMatrix();
-        GL11.glPushMatrix();
-        GL11.glColor3d(1, 1, 1);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(textureFace);
-        model.render();
-        GL11.glPopMatrix();
         GL11.glPopMatrix();
     }
 }

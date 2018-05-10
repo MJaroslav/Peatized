@@ -5,12 +5,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
 public class PeatizedTab extends CreativeTabs {
-	public PeatizedTab(String lable) {
-		super(lable);
-	}
+    public PeatizedTab(String lable) {
+        super(lable);
+    }
 
-	@Override
-	public Item getTabIconItem() {
-		return PeatizedItems.resource;
-	}
+    @Override
+    public Item getTabIconItem() {
+        return PeatizedItems.resource;
+    }
 }

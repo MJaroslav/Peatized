@@ -8,11 +8,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mjaroslav.mcmods.mjutils.lib.utils.UtilsGame;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
+import mjaroslav.mcmods.peatized.lib.NBTInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -49,7 +49,7 @@ public class TileRFCompressor extends TileEntity implements ISidedInventory, IEn
 
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
-        return from != ForgeDirection.DOWN;
+        return from == ForgeDirection.UNKNOWN || UtilsGame.getSideFromMeta(getBlockMetadata(), from.ordinal()) == 3;
     }
 
     @Override
@@ -70,20 +70,19 @@ public class TileRFCompressor extends TileEntity implements ISidedInventory, IEn
     @Override
     public void updateEntity() {
         if (!worldObj.isRemote) {
-            boolean flag = false;
             if (this.storage.getEnergyStored() >= rfToJumpRate) {
-                if (this.compressor.currentJumps == 0 && this.compressor.canWork()) {
-                    this.compressor.jumps = CompressorRecipes.compressing().getJumps(this.compressor.inventory[0]);
+                if (this.compressor.currentActivations == 0 && this.compressor.canWork()) {
+                    this.compressor.activations = CompressorRecipes.compressing()
+                            .getJumps(this.compressor.inventory[0]);
                     if (this.cooldown <= 0)
-                        if (this.compressor.jumps == 1) {
-                            this.compressor.currentJumps = 0;
-                            this.compressor.jumps = 0;
+                        if (this.compressor.activations == 1) {
+                            this.compressor.currentActivations = 0;
+                            this.compressor.activations = 0;
                             this.storage.setEnergyStored(this.storage.getEnergyStored() - rfToJumpRate);
                             this.compressor.work();
-                            flag = true;
                             this.cooldown = 20;
                         } else {
-                            this.compressor.currentJumps++;
+                            this.compressor.currentActivations++;
                             this.storage.setEnergyStored(this.storage.getEnergyStored() - rfToJumpRate);
                             this.cooldown = 20;
                         }
@@ -91,17 +90,16 @@ public class TileRFCompressor extends TileEntity implements ISidedInventory, IEn
                     if (this.cooldown <= 0) {
                         this.cooldown = 20;
                         this.storage.setEnergyStored(this.storage.getEnergyStored() - rfToJumpRate);
-                        this.compressor.currentJumps++;
-                        if (this.compressor.currentJumps >= this.compressor.jumps) {
-                            this.compressor.currentJumps = 0;
-                            this.compressor.jumps = 0;
+                        this.compressor.currentActivations++;
+                        if (this.compressor.currentActivations >= this.compressor.activations) {
+                            this.compressor.currentActivations = 0;
+                            this.compressor.activations = 0;
                             this.compressor.work();
-                            flag = true;
                         }
                     }
                 } else {
-                    this.compressor.currentJumps = 0;
-                    this.compressor.jumps = 0;
+                    this.compressor.currentActivations = 0;
+                    this.compressor.activations = 0;
                 }
             }
             if (this.cooldown == 1)
@@ -114,25 +112,23 @@ public class TileRFCompressor extends TileEntity implements ISidedInventory, IEn
                         this.worldObj.rand.nextFloat() * 0.25F + 0.6F);
             if (this.cooldown > 0)
                 this.cooldown--;
-            if (!this.compressor.canWork() && (this.compressor.currentJumps > 0 || this.compressor.jumps > 0)) {
-                this.compressor.currentJumps = 0;
-                this.compressor.jumps = 0;
-                flag = true;
+            if (!this.compressor.canWork()
+                    && (this.compressor.currentActivations > 0 || this.compressor.activations > 0)) {
+                this.compressor.currentActivations = 0;
+                this.compressor.activations = 0;
             }
             if (this.compressor.canWork()) {
-                this.compressor.jumps = CompressorRecipes.compressing().getJumps(this.compressor.inventory[0]);
-                flag = true;
-            }
-            if (flag) {
-                this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-                this.markDirty();
+                this.compressor.activations = CompressorRecipes.compressing().getJumps(this.compressor.inventory[0]);
             }
         }
+        this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        this.markDirty();
     }
 
     @SideOnly(Side.CLIENT)
     public int getScaleForProgressTime(int size) {
-        return this.compressor.currentJumps * size / (this.compressor.jumps == 0 ? 1 : this.compressor.jumps);
+        return this.compressor.currentActivations * size
+                / (this.compressor.activations == 0 ? 1 : this.compressor.activations);
     }
 
     @SideOnly(Side.CLIENT)
@@ -183,12 +179,10 @@ public class TileRFCompressor extends TileEntity implements ISidedInventory, IEn
     }
 
     public void readFromNBTS(NBTTagCompound nbt) {
-        NBTTagList nbttaglist = nbt.getTagList("Items", 10);
         this.compressor.readFromNBT(nbt);
-        this.cooldown = nbt.getShort("Cooldown");
-        if (nbt.hasKey("CustomName", 8)) {
-            this.customName = nbt.getString("CustomName");
-        }
+        this.cooldown = nbt.getShort(NBTInfo.COOLDOWN);
+        if (nbt.hasKey(NBTInfo.CUSTOM_NAME, 8))
+            this.customName = nbt.getString(NBTInfo.CUSTOM_NAME);
         this.storage.readFromNBT(nbt);
     }
 
@@ -199,10 +193,10 @@ public class TileRFCompressor extends TileEntity implements ISidedInventory, IEn
     }
 
     public void writeToNBTS(NBTTagCompound nbt) {
-        nbt.setShort("Cooldown", (short) this.cooldown);
+        nbt.setShort(NBTInfo.COOLDOWN, (short) this.cooldown);
         this.compressor.writeToNBT(nbt);
         if (this.hasCustomInventoryName()) {
-            nbt.setString("CustomName", this.customName);
+            nbt.setString(NBTInfo.CUSTOM_NAME, this.customName);
         }
         this.storage.writeToNBT(nbt);
     }
@@ -248,8 +242,7 @@ public class TileRFCompressor extends TileEntity implements ISidedInventory, IEn
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
         return side == 0 ? slotsBottom
-                : (UtilsGame.getSideFromMeta(getBlockMetadata(), side) == 4 ? new int[] { 0 }
-                         : new int[] {});
+                : (UtilsGame.getSideFromMeta(getBlockMetadata(), side) == 4 ? new int[] { 0 } : new int[] {});
     }
 
     @Override

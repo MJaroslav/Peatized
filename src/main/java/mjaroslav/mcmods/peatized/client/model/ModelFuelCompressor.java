@@ -23,8 +23,8 @@ public class ModelFuelCompressor extends ModelBase {
 
     public ModelFuelCompressor(float size) {
         this.size = size;
-        this.textureWidth = 76;
-        this.textureHeight = 76;
+        this.textureWidth = 128;
+        this.textureHeight = 128;
         this.base5 = new ModelRenderer(this, 0, 17);
         this.base5.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.base5.addBox(-8.0F, -8.0F, -8.0F, 16, 7, 16, 0.0F);

@@ -3,23 +3,14 @@ package mjaroslav.mcmods.peatized.client.render.item;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import mjaroslav.mcmods.peatized.lib.ModInfo;
+import mjaroslav.mcmods.peatized.client.model.*;
+import mjaroslav.mcmods.peatized.client.render.tileentity.*;
+import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 public class ItemBlockCompressorRenderer implements IItemRenderer {
-    public static ResourceLocation getRes(int meta) {
-        switch (meta) {
-        default:
-            return new ResourceLocation(ModInfo.MODID, "textures/models/compressor/compressor.png");
-        case 1:
-            return new ResourceLocation(ModInfo.MODID, "textures/models/compressor/compressor_rf.png");
-        case 2:
-            return new ResourceLocation(ModInfo.MODID, "textures/models/compressor/compressor_fuel.png");
-        }
-    }
-
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return true;
@@ -30,17 +21,31 @@ public class ItemBlockCompressorRenderer implements IItemRenderer {
         return true;
     }
 
+    public static final ModelBaseCompressor modelBase = new ModelBaseCompressor(0.0625F);
+    public static final ModelRFCompressor modelRf = new ModelRFCompressor(0.0625F);
+    public static final ModelFuelCompressor modelFuel = new ModelFuelCompressor(0.0625F);
+
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
-        if (item != null)
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(getRes(item.getItemDamage()));
         if (type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.EQUIPPED)
-            GL11.glTranslated(0.5, 1.5, 0.5);
+            GL11.glTranslated(0.5, 0.5, 0.5);
         else
-            GL11.glTranslated(0, 1, 0);
+            GL11.glTranslated(0, 0, 0);
         GL11.glRotated(180, 0, 0, 1);
-        // TileCompressorRenderer.model.render();
+        if (item.getItem() == Item.getItemFromBlock(PeatizedBlocks.baseCompressor)) {
+            FMLClientHandler.instance().getClient().renderEngine.bindTexture(TileBaseCompressorRenderer.texture);
+            modelBase.render();
+        }
+        if (item.getItem() == Item.getItemFromBlock(PeatizedBlocks.fuelCompressor)
+                || item.getItem() == Item.getItemFromBlock(PeatizedBlocks.fuelCompressorLit)) {
+            FMLClientHandler.instance().getClient().renderEngine.bindTexture(TileFuelCompressorRenderer.texture);
+            modelFuel.render();
+        }
+        if (item.getItem() == Item.getItemFromBlock(PeatizedBlocks.rfCompressor)) {
+            FMLClientHandler.instance().getClient().renderEngine.bindTexture(TileRFCompressorRenderer.texture);
+            modelRf.render();
+        }
         GL11.glPopMatrix();
     }
 }

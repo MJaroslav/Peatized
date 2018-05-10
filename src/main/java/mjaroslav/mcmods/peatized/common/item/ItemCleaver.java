@@ -7,6 +7,7 @@ import mjaroslav.mcmods.mjutils.lib.utils.UtilsGame;
 import mjaroslav.mcmods.peatized.ModPeatized;
 import mjaroslav.mcmods.peatized.lib.CategoryGeneralInfo.CategoryCleaversInfo;
 import mjaroslav.mcmods.peatized.lib.CategoryGeneralInfo.CategoryGraphicsInfo;
+import mjaroslav.mcmods.peatized.lib.NBTInfo;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.EntityTameable;
@@ -148,49 +149,49 @@ public class ItemCleaver extends ItemAxe {
     public static void setCooldown(ItemStack stack, World world) {
         if (!stack.hasTagCompound())
             stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setLong("cooldown", world.getTotalWorldTime() + getCooldownTime(stack));
+        stack.getTagCompound().setLong(NBTInfo.COOLDOWN, world.getTotalWorldTime() + getCooldownTime(stack));
     }
 
     public static boolean hasCooldown(ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTagCompound().hasKey("cooldown");
+        return stack.hasTagCompound() && stack.getTagCompound().hasKey(NBTInfo.COOLDOWN);
     }
 
     public static long getCooldown(ItemStack stack) {
-        return hasCooldown(stack) ? stack.getTagCompound().getLong("cooldown") : 0;
+        return hasCooldown(stack) ? stack.getTagCompound().getLong(NBTInfo.COOLDOWN) : 0;
     }
 
     public static long getBlood(ItemStack stack) {
-        return hasBlood(stack) ? stack.getTagCompound().getLong("blood") : 0;
+        return hasBlood(stack) ? stack.getTagCompound().getLong(NBTInfo.BLOOD) : 0;
     }
 
     public static boolean hasBlood(ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTagCompound().hasKey("blood");
+        return stack.hasTagCompound() && stack.getTagCompound().hasKey(NBTInfo.BLOOD);
     }
 
     public static void removeCooldown(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("cooldown"))
-            stack.getTagCompound().removeTag("cooldown");
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBTInfo.COOLDOWN))
+            stack.getTagCompound().removeTag(NBTInfo.COOLDOWN);
     }
 
     public static void checkCooldown(ItemStack stack, World world) {
-        if (hasCooldown(stack) && stack.getTagCompound().getLong("cooldown") < world.getTotalWorldTime())
+        if (hasCooldown(stack) && stack.getTagCompound().getLong(NBTInfo.COOLDOWN) < world.getTotalWorldTime())
             removeCooldown(stack);
     }
 
     public static void setBlood(ItemStack stack, World world) {
         if (!stack.hasTagCompound())
             stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setLong("blood",
+        stack.getTagCompound().setLong(NBTInfo.BLOOD,
                 world.getTotalWorldTime() + UtilsGame.getTicksFromSeconds(CategoryCleaversInfo.bloodTime));
     }
 
     public static void removeBlood(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("blood"))
-            stack.getTagCompound().removeTag("blood");
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBTInfo.BLOOD))
+            stack.getTagCompound().removeTag(NBTInfo.BLOOD);
     }
 
     public static void checkBlood(ItemStack stack, World world) {
-        if (hasBlood(stack) && stack.getTagCompound().getLong("blood") < world.getTotalWorldTime())
+        if (hasBlood(stack) && stack.getTagCompound().getLong(NBTInfo.BLOOD) < world.getTotalWorldTime())
             removeBlood(stack);
     }
 

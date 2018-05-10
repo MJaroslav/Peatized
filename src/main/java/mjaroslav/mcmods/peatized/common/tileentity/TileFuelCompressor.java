@@ -8,6 +8,7 @@ import mjaroslav.mcmods.mjutils.lib.utils.UtilsGame;
 import mjaroslav.mcmods.peatized.common.block.BlockFuelCompressor;
 import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
 import mjaroslav.mcmods.peatized.common.item.crafting.CompressorRecipes;
+import mjaroslav.mcmods.peatized.lib.NBTInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -48,8 +49,8 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
             if (this.cooldown > 0)
                 this.cooldown--;
             if (!this.isBurning() && !this.compressor.isWorking() && !this.compressor.canWork()) {
-                this.compressor.jumps = 0;
-                this.compressor.currentJumps = 0;
+                this.compressor.activations = 0;
+                this.compressor.currentActivations = 0;
                 flag1 = true;
             }
             if (this.cooldown == 1)
@@ -63,30 +64,30 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
             if (this.cooldown <= 0) {
                 if (this.isBurning()) {
                     if (this.compressor.isWorking() && this.compressor.canWork()) {
-                        this.compressor.currentJumps++;
+                        this.compressor.currentActivations++;
                         this.cooldown = 20;
-                        if (this.compressor.currentJumps >= this.compressor.jumps) {
-                            this.compressor.jumps = 0;
-                            this.compressor.currentJumps = 0;
+                        if (this.compressor.currentActivations >= this.compressor.activations) {
+                            this.compressor.activations = 0;
+                            this.compressor.currentActivations = 0;
                             this.compressor.work();
                             flag1 = true;
                         }
                     } else if (this.compressor.canWork()) {
-                        this.compressor.jumps = CompressorRecipes.compressing().getJumps(this.compressor.inventory[0]);
-                        if (this.compressor.jumps == 1) {
-                            this.compressor.jumps = 0;
-                            this.compressor.currentJumps = 0;
+                        this.compressor.activations = CompressorRecipes.compressing().getJumps(this.compressor.inventory[0]);
+                        if (this.compressor.activations == 1) {
+                            this.compressor.activations = 0;
+                            this.compressor.currentActivations = 0;
                             this.compressor.work();
                             this.cooldown = 20;
                             flag1 = true;
                         } else {
-                            this.compressor.currentJumps = 1;
+                            this.compressor.currentActivations = 1;
                             this.cooldown = 20;
                             flag1 = true;
                         }
                     } else {
-                        this.compressor.jumps = 0;
-                        this.compressor.currentJumps = 0;
+                        this.compressor.activations = 0;
+                        this.compressor.currentActivations = 0;
                         flag1 = true;
                     }
                 } else {
@@ -103,16 +104,16 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
                                                 .getContainerItem(this.fuelSlot[0]);
                                     flag1 = true;
                                 }
-                                this.compressor.jumps = CompressorRecipes.compressing()
+                                this.compressor.activations = CompressorRecipes.compressing()
                                         .getJumps(this.compressor.inventory[0]);
-                                if (this.compressor.jumps == 1) {
-                                    this.compressor.jumps = 0;
-                                    this.compressor.currentJumps = 0;
+                                if (this.compressor.activations == 1) {
+                                    this.compressor.activations = 0;
+                                    this.compressor.currentActivations = 0;
                                     this.compressor.work();
                                     this.cooldown = 20;
                                     flag1 = true;
                                 } else {
-                                    this.compressor.currentJumps = 1;
+                                    this.compressor.currentActivations = 1;
                                     this.cooldown = 20;
                                     flag1 = true;
                                 }
@@ -135,7 +136,7 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
             }
             if (flag) {
                 if (flag != this.currentBurnTime > 0)
-                    flag = true;
+                    flag1 = true;
                 BlockFuelCompressor.updateCompressorBlockState(true, this.currentBurnTime > 0, worldObj, xCoord, yCoord,
                         zCoord);
             }
@@ -154,7 +155,7 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
 
     @SideOnly(Side.CLIENT)
     public int getScaleForProgressTime(int size) {
-        return this.compressor.currentJumps * size / (this.compressor.jumps == 0 ? 1 : this.compressor.jumps);
+        return this.compressor.currentActivations * size / (this.compressor.activations == 0 ? 1 : this.compressor.activations);
     }
 
     @SideOnly(Side.CLIENT)
@@ -244,20 +245,20 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
 
     public void readFromNBTS(NBTTagCompound nbt) {
         this.compressor.readFromNBT(nbt);
-        this.cooldown = nbt.getShort("Cooldown");
-        this.burnTime = nbt.getShort("BurnTime");
-        this.currentBurnTime = nbt.getShort("CurrentBurnTime");
-        NBTTagList nbttaglist = nbt.getTagList("FurnaceItems", 10);
+        this.cooldown = nbt.getShort(NBTInfo.COOLDOWN);
+        this.burnTime = nbt.getShort(NBTInfo.BURN_TIME);
+        this.currentBurnTime = nbt.getShort(NBTInfo.BURN_CURRENT_TIME);
+        NBTTagList nbttaglist = nbt.getTagList(NBTInfo.ITEMS, 10);
         this.fuelSlot = new ItemStack[1];
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
             NBTTagCompound nbt1 = nbttaglist.getCompoundTagAt(i);
-            byte b0 = nbt1.getByte("Slot");
+            byte b0 = nbt1.getByte(NBTInfo.SLOT);
             if (b0 >= 0 && b0 < this.fuelSlot.length) {
                 this.fuelSlot[b0] = ItemStack.loadItemStackFromNBT(nbt1);
             }
         }
-        if (nbt.hasKey("CustomName", 8)) {
-            this.customName = nbt.getString("CustomName");
+        if (nbt.hasKey(NBTInfo.CUSTOM_NAME, 8)) {
+            this.customName = nbt.getString(NBTInfo.CUSTOM_NAME);
         }
     }
 
@@ -268,24 +269,21 @@ public class TileFuelCompressor extends TileEntity implements ICompressor, ISide
     }
 
     public void writeToNBTS(NBTTagCompound nbt) {
-        nbt.setShort("Cooldown", (short) this.cooldown);
         NBTTagList nbttaglist = new NBTTagList();
-        for (int i = 0; i < this.fuelSlot.length; ++i) {
+        for (int i = 0; i < this.fuelSlot.length; ++i)
             if (this.fuelSlot[i] != null) {
                 NBTTagCompound nbt1 = new NBTTagCompound();
-                nbt1.setByte("Slot", (byte) i);
+                nbt1.setByte(NBTInfo.SLOT, (byte) i);
                 this.fuelSlot[i].writeToNBT(nbt1);
                 nbttaglist.appendTag(nbt1);
             }
-        }
-        nbt.setTag("FurnaceItems", nbttaglist);
-        nbt.setShort("Cooldown", (short) this.cooldown);
-        nbt.setShort("BurnTime", (short) this.burnTime);
-        nbt.setShort("CurrentBurnTime", (short) this.currentBurnTime);
+        nbt.setTag(NBTInfo.ITEMS, nbttaglist);
+        nbt.setShort(NBTInfo.COOLDOWN, (short) this.cooldown);
+        nbt.setShort(NBTInfo.BURN_TIME, (short) this.burnTime);
+        nbt.setShort(NBTInfo.BURN_CURRENT_TIME, (short) this.currentBurnTime);
         this.compressor.writeToNBT(nbt);
-        if (this.hasCustomInventoryName()) {
-            nbt.setString("CustomName", this.customName);
-        }
+        if (this.hasCustomInventoryName())
+            nbt.setString(NBTInfo.CUSTOM_NAME, this.customName);
     }
 
     @Override

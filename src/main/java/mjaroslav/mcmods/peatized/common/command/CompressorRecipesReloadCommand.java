@@ -36,7 +36,7 @@ public class CompressorRecipesReloadCommand implements ICommand {
     @Override
     public void processCommand(ICommandSender sender, String[] options) {
         CompressorRecipes.compressing().readFromConfig();
-        NetworkHandler.INSTANCE.sendToAll(new PacketCompressingRecipes());
+        NetworkHandler.sendToAll(new PacketCompressingRecipes());
         ModInfo.LOG.info("Compressing recipes reloaded!");
         sender.addChatMessage(
                 new ChatComponentText(StatCollector.translateToLocal("peatized.commands.compressorreload.done")));

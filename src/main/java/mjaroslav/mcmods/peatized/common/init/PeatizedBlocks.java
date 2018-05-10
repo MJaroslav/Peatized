@@ -49,7 +49,7 @@ public class PeatizedBlocks implements IModule {
         GameRegistry.registerBlock(peatSlab, ItemPeatSlab.class, "peat_slab");
         GameRegistry.registerBlock(peatSlabDouble, ItemPeatSlab.class, "peat_slab_double");
         GameRegistry.registerBlock(peatStairs, "peat_stairs");
-        GameRegistry.registerBlock(upa, "upa");
+        GameRegistry.registerBlock(upa, ItemBlockUpa.class, "upa");
         GameRegistry.registerTileEntity(TileUpa.class, "tile_upa");
         GameRegistry.registerBlock(baseCompressor, "compressor_base");
         GameRegistry.registerTileEntity(TileBaseCompressor.class, "tile_compressor_base");

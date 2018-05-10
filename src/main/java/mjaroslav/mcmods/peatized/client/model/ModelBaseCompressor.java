@@ -24,7 +24,7 @@ public class ModelBaseCompressor extends ModelBase {
     public ModelBaseCompressor(float size) {
         this.size = size;
         this.textureWidth = 64;
-        this.textureHeight = 76;
+        this.textureHeight = 128;
         this.pistonStick = new ModelRenderer(this, 0, 68);
         this.pistonStick.setRotationPoint(0.0F, -1.0F, 0.0F);
         this.pistonStick.addBox(-0.5F, -4.0F, -0.5F, 1, 4, 1, 0.0F);

@@ -73,7 +73,7 @@ public class GuiCompressor extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int x, int y) {
         this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 96 + 2,
                 4210752);
-        String s = this.tile.getCompressor().currentJumps + "/" + this.tile.getCompressor().jumps;
+        String s = this.tile.getCompressor().currentActivations + "/" + this.tile.getCompressor().activations;
         fontRendererObj.drawString(s, 69, 42, 4210752);
         s = ((IInventory) tile).hasCustomInventoryName() ? ((IInventory) tile).getInventoryName()
                 : I18n.format(((IInventory) tile).getInventoryName(), new Object[0]);

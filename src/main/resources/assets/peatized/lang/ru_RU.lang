@@ -3,13 +3,15 @@ itemGroup.peatized=Peatized
 tile.peatized.bogDirt.name=Болотная земля
 tile.peatized.bogDirt.dry.name=Сухая болотная земля
 tile.peatized.bogDirt.error.name=Болотная земля (ошибка)
-tile.peatized.compressor.0.name=Компрессор
-tile.peatized.compressor.1.name=Флаксовый компрессор
-tile.peatized.compressor.2.name=Печной компрессор
+tile.peatized.compressor.base.name=Простой компрессор
+tile.peatized.compressor.rf.name=Флаксовый компрессор
+tile.peatized.compressor.fuel.name=Печной компрессор
 tile.peatized.peat.0.name=Торфяные кирпичи
 tile.peatized.peat.1.name=Резные торфяные кирпичи
 tile.peatized.peatSlab.0.name=Плита из торфяных кирпичей
 tile.peatized.peatStairs.name=Ступеньки из торфяных кирпичей
+tile.peatized.upa.common.name=Обычный упа
+tile.peatized.upa.forest.name=Зеленый лесной упа
 
 item.peatized.resource.0.name=Комок торфа
 item.peatized.resource.1.name=Брикет торфа
@@ -18,6 +20,7 @@ item.peatized.resource.3.name=Каменная шестерня
 item.peatized.cleaver.iron.name=Железный тесак
 item.peatized.cleaver.diamond.name=Алмазный тесак
 item.peatized.cleaver.gold.name=Золотой тесак
+item.peatized.cleaver.broze.name=Бронзовый тесак
 item.peatized.cleaver.rena.name=Тесак Рены
 
 tooltip.bogDirt.biome=Бонус биома: {biomeBonus}
@@ -34,6 +37,10 @@ tooltip.bogDirt.water.2=Воды на шаг: {waterOneStep} (Бонус шаг�
 tooltip.error.meta=Плохой meta id!
 tooltip.cleaver.rena=§6§oOmochiikaeri~!
 tooltip.cleaver.rena.alt=§6§oКакой милый! Хочу забрать себе домой!!!
+tooltip.cleaver.cooldown=Откат особого удара:
+tooltip.upa.comment.common=Самый обычный упа
+tooltip.upa.comment.forest=Только поступил в продажу!
+tooltip.upa.author=Автор:
 
 container.compressor=Компрессор
 container.compressor.rf=Флаксовый компрессор

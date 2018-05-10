@@ -1,28 +1,19 @@
 package mjaroslav.mcmods.peatized.common.block;
 
-import java.util.List;
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mjaroslav.mcmods.mjutils.lib.utils.UtilsGame;
 import mjaroslav.mcmods.peatized.ModPeatized;
-import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
-import mjaroslav.mcmods.peatized.common.tileentity.*;
+import mjaroslav.mcmods.peatized.common.tileentity.TileRFCompressor;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -34,21 +25,21 @@ public class BlockRFCompressor extends Block implements ITileEntityProvider {
         super(Material.rock);
         setHardness(4.0F);
         setStepSound(Block.soundTypeStone);
-        setBlockName("peatized.compressor");
+        setBlockName("peatized.compressor.rf");
         setBlockTextureName("stone");
         setCreativeTab(ModPeatized.tab);
     }
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-            return new TileRFCompressor();
+        return new TileRFCompressor();
     }
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
         world.setBlockMetadataWithNotify(x, y, z, UtilsGame.getMetaFromRotation(placer), 2);
     }
-    
+
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float clickX,
             float clickY, float clickZ) {
@@ -56,9 +47,9 @@ public class BlockRFCompressor extends Block implements ITileEntityProvider {
         TileEntity entity = world.getTileEntity(x, y, z);
         if (block != null && entity != null && player != null) {
             if (!player.isSneaking()) {
-               
-                    player.openGui(ModPeatized.instance,1, world, x, y, z);
-                    return true;
+
+                player.openGui(ModPeatized.instance, 1, world, x, y, z);
+                return true;
             }
         }
         return false;
@@ -87,8 +78,8 @@ public class BlockRFCompressor extends Block implements ITileEntityProvider {
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block b, int m) {
-            dropItems(world, x, y, z);
-            super.breakBlock(world, x, y, z, b, m);
+        dropItems(world, x, y, z);
+        super.breakBlock(world, x, y, z, b, m);
     }
 
     @Override
@@ -113,6 +104,7 @@ public class BlockRFCompressor extends Block implements ITileEntityProvider {
 
     @Override
     public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        return side.equals(ForgeDirection.UP) || side.equals(ForgeDirection.DOWN);
+        int rSide = UtilsGame.getSideFromMeta(world.getBlockMetadata(x, y, z), side.ordinal());
+        return side.equals(ForgeDirection.UP) || side.equals(ForgeDirection.DOWN) || rSide == 3 || rSide == 4;
     }
 }

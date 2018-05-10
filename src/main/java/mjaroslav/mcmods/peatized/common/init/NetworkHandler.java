@@ -7,15 +7,13 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import mjaroslav.mcmods.mjutils.lib.module.IModule;
 import mjaroslav.mcmods.mjutils.lib.module.ModModule;
-import mjaroslav.mcmods.peatized.common.network.LocationDoublePacket;
-import mjaroslav.mcmods.peatized.common.network.PacketCompressingRecipes;
+import mjaroslav.mcmods.peatized.common.network.*;
 import mjaroslav.mcmods.peatized.lib.ModInfo;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
 @ModModule(modid = ModInfo.MODID)
 public class NetworkHandler implements IModule {
-    public static final NetworkHandler INSTANCE = new NetworkHandler();
     public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.MODID);
     private static int dec = 0;
 
@@ -49,7 +47,8 @@ public class NetworkHandler implements IModule {
 
     @Override
     public void init(FMLInitializationEvent event) {
-        NETWORK.registerMessage(PacketCompressingRecipes.class, PacketCompressingRecipes.class, dec++, Side.CLIENT);
+        registerMessage(PacketCompressingRecipes.class, Side.CLIENT);
+        registerMessage(PacketUpa.class, Side.SERVER);
     }
 
     @Override
@@ -74,5 +73,9 @@ public class NetworkHandler implements IModule {
     @Override
     public String[] modDependencies() {
         return null;
+    }
+
+    public static void registerMessage(Class messageAndHandlerClass, Side side) {
+        NETWORK.registerMessage(messageAndHandlerClass, messageAndHandlerClass, dec++, side);
     }
 }

@@ -1,7 +1,10 @@
 package mjaroslav.mcmods.peatized.common.block;
 
+import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import mjaroslav.mcmods.mjutils.lib.utils.UtilsGame;
 import mjaroslav.mcmods.peatized.ModPeatized;
 import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
@@ -9,12 +12,14 @@ import mjaroslav.mcmods.peatized.common.tileentity.TileFuelCompressor;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -30,11 +35,13 @@ public class BlockFuelCompressor extends Block implements ITileEntityProvider {
         this.isLit = isLit;
         setHardness(3.5F);
         setStepSound(Block.soundTypeStone);
-        setBlockName("peatized.compressor");
+        setBlockName("peatized.compressor.fuel");
         setBlockTextureName("stone");
-        setCreativeTab(ModPeatized.tab);
-        if (isLit)
+        if (isLit) {
             setLightLevel(0.875F);
+            setCreativeTab(null);
+        } else
+            setCreativeTab(ModPeatized.tab);
     }
 
     public void dropItems(World world, int x, int y, int z) {
@@ -114,6 +121,41 @@ public class BlockFuelCompressor extends Block implements ITileEntityProvider {
         return -1;
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+        if (isLit) {
+            int l = world.getBlockMetadata(x, y, z);
+            float f = (float) x + 0.5F;
+            float f1 = (float) y + 0.8F + rand.nextFloat() * 2.0F / 16.0F;
+            float f2 = (float) z + 0.5F;
+            float f3 = 0.52F;
+            float f4 = rand.nextFloat() * 0.3F - 0.15F;
+            if (l == 5) {
+                world.spawnParticle("smoke", (double) (f - f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double) (f - f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
+            } else if (l == 4) {
+                world.spawnParticle("smoke", (double) (f + f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double) (f + f3), (double) f1, (double) (f2 + f4), 0.0D, 0.0D, 0.0D);
+            } else if (l == 3) {
+                world.spawnParticle("smoke", (double) (f + f4), (double) f1, (double) (f2 - f3), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double) (f + f4), (double) f1, (double) (f2 - f3), 0.0D, 0.0D, 0.0D);
+            } else if (l == 2) {
+                world.spawnParticle("smoke", (double) (f + f4), (double) f1, (double) (f2 + f3), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double) (f + f4), (double) f1, (double) (f2 + f3), 0.0D, 0.0D, 0.0D);
+            }
+            world.spawnParticle("largesmoke", (double) x + 0.5, (double) y + 1.625, (double) z + 0.5, 0.0D, 0.0D, 0.0D);
+        }
+    }
+
+    @Override
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB box, List list, Entity entity) {
+        this.setBlockBounds(0.3125F, 1, 0.3125F, 0.6875F, 1.625F, 0.6875F);
+        super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+        this.setBlockBounds(0, 0, 0, 1, 1, 1);
+        super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+    }
+
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float clickX,
             float clickY, float clickZ) {
@@ -130,6 +172,7 @@ public class BlockFuelCompressor extends Block implements ITileEntityProvider {
 
     @Override
     public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        return side.equals(ForgeDirection.UP) || side.equals(ForgeDirection.DOWN);
+        int rSide = UtilsGame.getSideFromMeta(world.getBlockMetadata(x, y, z), side.ordinal());
+        return side.equals(ForgeDirection.DOWN) || rSide == 3 || rSide == 5;
     }
 }

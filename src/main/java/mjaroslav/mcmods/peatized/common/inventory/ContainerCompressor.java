@@ -56,8 +56,8 @@ public class ContainerCompressor extends Container {
     @Override
     public void addCraftingToCrafters(ICrafting crafter) {
         super.addCraftingToCrafters(crafter);
-        crafter.sendProgressBarUpdate(this, 0, this.tile.getCompressor().currentJumps);
-        crafter.sendProgressBarUpdate(this, 1, this.tile.getCompressor().jumps);
+        crafter.sendProgressBarUpdate(this, 0, this.tile.getCompressor().currentActivations);
+        crafter.sendProgressBarUpdate(this, 1, this.tile.getCompressor().activations);
         if (tile instanceof TileRFCompressor
                 && this.lastRf != ((TileRFCompressor) this.tile).getEnergyStored(ForgeDirection.UNKNOWN)) {
             crafter.sendProgressBarUpdate(this, 2,
@@ -74,11 +74,11 @@ public class ContainerCompressor extends Container {
         super.detectAndSendChanges();
         for (int i = 0; i < this.crafters.size(); ++i) {
             ICrafting icrafting = (ICrafting) this.crafters.get(i);
-            if (this.lastCurrentJumps != this.tile.getCompressor().currentJumps) {
-                icrafting.sendProgressBarUpdate(this, 0, this.tile.getCompressor().currentJumps);
+            if (this.lastCurrentJumps != this.tile.getCompressor().currentActivations) {
+                icrafting.sendProgressBarUpdate(this, 0, this.tile.getCompressor().currentActivations);
             }
-            if (this.lastJumps != this.tile.getCompressor().jumps) {
-                icrafting.sendProgressBarUpdate(this, 1, this.tile.getCompressor().jumps);
+            if (this.lastJumps != this.tile.getCompressor().activations) {
+                icrafting.sendProgressBarUpdate(this, 1, this.tile.getCompressor().activations);
             }
             if (tile instanceof TileRFCompressor
                     && this.lastRf != ((TileRFCompressor) this.tile).getEnergyStored(ForgeDirection.UNKNOWN)) {
@@ -92,8 +92,8 @@ public class ContainerCompressor extends Container {
                     icrafting.sendProgressBarUpdate(this, 4, ((TileFuelCompressor) this.tile).currentBurnTime);
             }
         }
-        this.lastCurrentJumps = this.tile.getCompressor().currentJumps;
-        this.lastJumps = this.tile.getCompressor().jumps;
+        this.lastCurrentJumps = this.tile.getCompressor().currentActivations;
+        this.lastJumps = this.tile.getCompressor().activations;
         if (tile instanceof TileRFCompressor)
             this.lastRf = ((TileRFCompressor) this.tile).getEnergyStored(ForgeDirection.UNKNOWN);
         if (tile instanceof TileFuelCompressor) {
@@ -106,11 +106,11 @@ public class ContainerCompressor extends Container {
     public void updateProgressBar(int id, int value) {
         switch (id) {
         case 0: {
-            this.tile.getCompressor().currentJumps = value;
+            this.tile.getCompressor().currentActivations = value;
         }
             break;
         case 1: {
-            this.tile.getCompressor().jumps = value;
+            this.tile.getCompressor().activations = value;
         }
             break;
         case 2: {

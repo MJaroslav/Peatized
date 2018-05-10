@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import mjaroslav.mcmods.peatized.client.model.ModelFuelCompressor;
+import mjaroslav.mcmods.peatized.client.utils.UtilsRender;
 import mjaroslav.mcmods.peatized.common.tileentity.TileFuelCompressor;
 import mjaroslav.mcmods.peatized.lib.ModInfo;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -16,7 +17,7 @@ public class TileFuelCompressorRenderer extends TileEntitySpecialRenderer {
     public static final ResourceLocation textureLit = new ResourceLocation(ModInfo.MODID,
             "textures/models/compressor/fuel_lit.png");
 
-    public ModelFuelCompressor model = new ModelFuelCompressor(0.0625F);
+    public static final ModelFuelCompressor model = new ModelFuelCompressor(0.0625F);
 
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks) {
@@ -52,6 +53,11 @@ public class TileFuelCompressorRenderer extends TileEntitySpecialRenderer {
         else
             model.pistonStick.rotationPointY = 0;
         model.render();
+        if (!(tile.cooldown >= 1 && tile.cooldown < 11)) {
+            GL11.glTranslated(-0.1, 0.3, 0.05);
+            GL11.glRotated(90, 1, 0, 0);
+            UtilsRender.renderItemStack(0, 0, 0, tile.getStackInSlot(1));
+        }
         GL11.glPopMatrix();
     }
 }

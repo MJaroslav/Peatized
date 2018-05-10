@@ -25,7 +25,7 @@ public class BlockBaseCompressor extends Block implements ITileEntityProvider {
         super(Material.rock);
         setHardness(3.5F);
         setStepSound(Block.soundTypeStone);
-        setBlockName("peatized.compressor");
+        setBlockName("peatized.compressor.base");
         setBlockTextureName("stone");
         setCreativeTab(ModPeatized.tab);
     }
@@ -97,11 +97,13 @@ public class BlockBaseCompressor extends Block implements ITileEntityProvider {
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block b, int m) {
-            dropItems(world, x, y, z);
-            super.breakBlock(world, x, y, z, b, m);
+        dropItems(world, x, y, z);
+        super.breakBlock(world, x, y, z, b, m);
     }
+
     @Override
     public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        return side.equals(ForgeDirection.UP) || side.equals(ForgeDirection.DOWN);
+        return side.equals(ForgeDirection.UP) || side.equals(ForgeDirection.DOWN)
+                || UtilsGame.getSideFromMeta(world.getBlockMetadata(x, y, z), side.ordinal()) == 3;
     }
 }
