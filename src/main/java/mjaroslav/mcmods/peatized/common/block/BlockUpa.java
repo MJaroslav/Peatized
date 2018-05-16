@@ -6,15 +6,16 @@ import java.util.Random;
 import mjaroslav.mcmods.peatized.ModPeatized;
 import mjaroslav.mcmods.peatized.common.init.PeatizedBlocks;
 import mjaroslav.mcmods.peatized.common.tileentity.TileUpa;
-import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class BlockUpa extends Block implements ITileEntityProvider {
@@ -94,6 +95,23 @@ public class BlockUpa extends Block implements ITileEntityProvider {
             }
         }
         super.breakBlock(world, x, y, z, block, meta);
+    }
+
+    @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+        TileUpa tile = (TileUpa) world.getTileEntity(x, y, z);
+        if (tile != null) {
+            NBTTagCompound nbt = new NBTTagCompound();
+            tile.writeToNBT(nbt);
+            ItemStack stack = new ItemStack(PeatizedBlocks.upa, 1);
+            nbt.removeTag("id");
+            nbt.removeTag("x");
+            nbt.removeTag("y");
+            nbt.removeTag("z");
+            stack.setTagCompound(nbt);
+            return stack;
+        } else
+            return super.getPickBlock(target, world, x, y, z, player);
     }
 
     @Override

@@ -12,6 +12,10 @@ tile.peatized.peatSlab.0.name=Плита из торфяных кирпичей
 tile.peatized.peatStairs.name=Ступеньки из торфяных кирпичей
 tile.peatized.upa.common.name=Обычный упа
 tile.peatized.upa.forest.name=Зеленый лесной упа
+tile.peatized.upa.bloody.name=Кровавый упа
+tile.peatized.upa.metal.name=Металлический упа
+tile.peatized.upa.alexsocol.name=Ангельский Упа конца времён
+tile.peatized.upa.sumo.name=Упа
 
 item.peatized.resource.0.name=Комок торфа
 item.peatized.resource.1.name=Брикет торфа
@@ -40,6 +44,10 @@ tooltip.cleaver.rena.alt=§6§oКакой милый! Хочу забрать с
 tooltip.cleaver.cooldown=Откат особого удара:
 tooltip.upa.comment.common=Самый обычный упа
 tooltip.upa.comment.forest=Только поступил в продажу!
+tooltip.upa.comment.bloody=Это дело принципа!
+tooltip.upa.comment.metal=Да он же стоит 10000¥!
+tooltip.upa.comment.alexsocol=Ваш карманный призыватель апокалипсиса! \о/
+tooltip.upa.comment.sumo=Что-то у меня заболела голова...
 tooltip.upa.author=Автор:
 
 container.compressor=Компрессор

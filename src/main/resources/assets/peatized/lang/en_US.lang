@@ -10,6 +10,11 @@ tile.peatized.peat.0.name=Peat bricks
 tile.peatized.peat.1.name=Chiseled peat bricks
 tile.peatized.peatSlab.0.name=Peat bricks slab
 tile.peatized.peatStairs.name=Peat bricks stairs
+tile.peatized.upa.common.name=Common upa
+tile.peatized.upa.forest.name=Green forest upa
+tile.peatized.upa.bloody.name=Bloody upa
+tile.peatized.upa.metal.name=Metal upa
+tile.peatized.upa.alexsolol.name=Angelic Upa of the End
 
 item.peatized.resource.0.name=Peat ball
 item.peatized.resource.1.name=Peat brick
@@ -36,6 +41,8 @@ tooltip.error.meta=Bad meta!
 tooltip.cleaver.rena=§6§oOmochiikaeri~!
 tooltip.cleaver.rena.alt=§6§oIt's so cute, I want to take it home!
 tooltip.cleaver.cooldown=Cooldown of a special strike:
+tooltip.upa.comment.alexsolol=Your pocket Apocalypse caller! \o/
+tooltip.upa.author=Author:
 
 container.compressor=Compressor
 container.compressor.rf=Flux compressor

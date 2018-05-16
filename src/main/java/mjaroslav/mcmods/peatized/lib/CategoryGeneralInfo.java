@@ -80,5 +80,9 @@ public class CategoryGeneralInfo {
         public static boolean altBlood;
         @ConfigField(defaultBoolean = true, comment = "Always render blood on Rena's cleaver.")
         public static boolean renaAlwaysBlood;
+        @ConfigField(minInt = 0, maxInt = 1, comment = "Mode of upa render. 0 - 8 models, 1 - shader.")
+        public static int upaItemRenderMode;
+        @ConfigField(minInt = 0, maxInt = 2, comment = "Mode of upa render. 0 - 8 models, 1 - shader, 2 - itemStack.")
+        public static int upaRenderMode;
     }
 }

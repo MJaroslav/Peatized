@@ -36,9 +36,6 @@ public class PeatizedGuiHandler implements IGuiHandler {
         if (ID == 2 && tile instanceof TileFuelCompressor) {
             return new GuiCompressor(player.inventory, (TileFuelCompressor) tile);
         }
-        if (ID == 3 && tile instanceof TileUpa) {
-            return new GuiUpa(player, (TileUpa) tile);
-        }
         return null;
     }
 }
