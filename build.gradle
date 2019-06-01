@@ -1,75 +1,107 @@
 buildscript {
     repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+        jcenter()
+        maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
     }
 }
 
 repositories {
     maven {
-            name "Mobius Repo"
-            url "http://mobiusstrip.eu/maven"
+        name "HWYLA"
+        url "http://tehnut.info/maven"
     }
     maven {
-        name 'CB Repo'
+        name "CB Repo"
         url "http://chickenbones.net/maven/"
     }
     maven {
-        name = "jitpack"
-        url "https://jitpack.io"
+        name = "JEI"
+        url = "https://modmaven.k-4u.nl"
     }
 }
 
-apply plugin: 'forge'
+apply plugin: "net.minecraftforge.gradle.forge"
 
-version = "1.0.0"
-group= "mjaroslav.mcmods.peatized"
-archivesBaseName = "peatized"
+ext.config = parseConfig(file("build.properties"))
+ext.mod = parseConfig(file("mod.properties"))
 
-compileJava.options.encoding = 'UTF-8'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
+version = "${config.mc_version}-${mod.version}-${mod.type}"
+group = mod.group
+archivesBaseName = mod.name
 
 minecraft {
-    version = "1.7.10-10.13.4.1614-1.7.10"
-    runDir = "eclipse"
+    version = "${config.mc_version}-${config.forge_version}"
+    runDir = "${config.run_dir}"
+    mappings = "${config.mappings}"
+    replace "@VERSION@", version
+    replaceIn "ModInfo.java"
+    makeObfSourceJar = false
 }
 
 dependencies {
-    compile "codechicken:CodeChickenLib:1.7.10-1.1.3.138:dev"
-    compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
-    compile "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
-    compile "mcp.mobius.waila:Waila:1.5.10_1.7.10"
-    compile 'com.github.MJaroslav:MJUtils:1.5.0'
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+    deobfProvided "mezz.jei:jei_1.12.2:4.9.2.196:api"
+    runtime "mezz.jei:jei_1.12.2:4.9.2.196"
+}
+
+compileJava.options.encoding = "UTF-8"
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 }
 
 processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        include "mcmod.info"
+        expand "version":project.version, "mcversion":project.minecraft.version
     }
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude "mcmod.info"
     }
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
-jar {
-    manifest.attributes('FMLAT': 'peatized_at.cfg')
+task deobfJar(type: Jar) {
+    from(sourceSets.main.output)
+    classifier = "deobf"
+}
+
+task srcJar(type: Jar) {
+    from(sourceSets.main.java)
+    classifier = "sources"
+}
+
+task apiJar(type: Jar) {
+    from(sourceSets.main.allJava)
+    from(sourceSets.main.output)
+    include "mjaroslav/mcmods/peatized/api/**"
+    classifier = "api"
+}
+
+artifacts {
+    archives srcJar, deobfJar, apiJar
+}
+
+static def parseConfig(File config) {
+    if(config.exists()){
+        config.withReader {
+            def prop = new Properties()
+            prop.load(it)
+            return (new ConfigSlurper().parse(prop))
+        }
+    } else {
+        return null
+    }
 }

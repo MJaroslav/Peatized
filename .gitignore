@@ -1,4 +1,4 @@
-# eclipse
+/wor# eclipse
 bin
 *.launch
 .settings
@@ -12,6 +12,7 @@ out
 *.iws
 *.iml
 .idea
+classes
 
 # gradle
 build
