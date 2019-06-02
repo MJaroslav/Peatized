@@ -1,4 +1,4 @@
-package mjaroslav.mcmods.peatized.lib;
+package mjaroslav.mcmods.peatized.common.lib;
 
 public class ModInfo {
     public static final String MOD_ID = "peatized";
@@ -11,7 +11,7 @@ public class ModInfo {
 
     private static final String UNLOCALIZED_NAME = MOD_ID + ".%s";
 
-    public static String createUnlocolizedName(String name) {
+    public static String unlocalizedName(String name) {
         return String.format(UNLOCALIZED_NAME, name);
     }
 }
