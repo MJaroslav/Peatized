@@ -1,25 +1,15 @@
-/wor# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
+# White list mode
+*
+/*/
 
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea
-classes
-
-# gradle
-build
-.gradle
-
-# other
-eclipse
-run
-
-schematic
+!/gradle/
+!/src/
+!/.gitignore
+!/build.gradle
+!/build.properties
+!/mod.properties
+!/gradlew
+!/gradlew.bat
+!/LICENSE
+!/README.md
+!/libs/

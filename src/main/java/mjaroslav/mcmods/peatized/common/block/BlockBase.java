@@ -6,7 +6,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockBase extends Block {
     public BlockBase(Material material, String name, SoundType sound, float resistance, float hardness) {
@@ -24,6 +26,14 @@ public class BlockBase extends Block {
         return 0;
     }
 
+    public ItemStack getItemStack() {
+        return new ItemStack(this);
+    }
+
+    protected String[] getOreNames() {
+        return new String[0];
+    }
+
     // For custom ItemBlock.
     protected ItemBlock createItemBlock() {
         return new ItemBlock(this);
@@ -32,5 +42,7 @@ public class BlockBase extends Block {
     public void register() {
         ForgeRegistries.BLOCKS.register(this);
         ForgeRegistries.ITEMS.register(createItemBlock().setRegistryName(getRegistryName()));
+        for (String ore : getOreNames())
+            OreDictionary.registerOre(ore, this);
     }
 }

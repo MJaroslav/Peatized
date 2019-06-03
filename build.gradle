@@ -21,6 +21,14 @@ repositories {
         name = "JEI"
         url = "https://modmaven.k-4u.nl"
     }
+    maven {
+        name = "player.to"
+        url = "http://maven.ic2.player.to"
+    }
+    maven {
+        name "BuildCraft"
+        url = "https://mod-buildcraft.com/maven"
+    }
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
@@ -41,10 +49,26 @@ minecraft {
     makeObfSourceJar = false
 }
 
+configurations {
+    compile.extendsFrom(deobfProvided)
+}
+
 dependencies {
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
-    deobfProvided "mezz.jei:jei_1.12.2:4.9.2.196:api"
-    runtime "mezz.jei:jei_1.12.2:4.9.2.196"
+    runtime "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+    deobfProvided "net.sengir.forestry:forestry_1.12.2:5.8.2.387:api"
+    runtime "net.sengir.forestry:forestry_1.12.2:5.8.2.387"
+    deobfProvided "mezz.jei:jei_1.12.2:4.14.4.264:api"
+    runtime "mezz.jei:jei_1.12.2:4.14.4.264"
+    deobfProvided "net.industrial-craft:industrialcraft-2:2.8.158-ex112:api"
+//    runtime "net.industrial-craft:industrialcraft-2:2.8.158-ex112:dev"
+    deobfProvided "com.mod-buildcraft:buildcraft-api:7.99.19"
+//    runtime "com.mod-buildcraft:buildcraft:7.99.19"
+}
+
+jar {
+    from configurations.deobfProvided.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }
 }
 
 compileJava.options.encoding = "UTF-8"
@@ -75,6 +99,9 @@ processResources {
 
 task deobfJar(type: Jar) {
     from(sourceSets.main.output)
+    from configurations.deobfProvided.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }
     classifier = "deobf"
 }
 

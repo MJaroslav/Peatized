@@ -9,6 +9,10 @@ public class ModInfo {
     public static final String COMMON_PROXY = "mjaroslav.mcmods.peatized.common.CommonProxy";
 //    public static final String SERVER_PROXY = "mjaroslav.mcmods.peatized.server.ServerProxy";
 
+    public static final String CLIENT_CONFIGURATOR = "mjaroslav.mcmods.peatized.client.ClientConfigurator";
+    public static final String COMMON_CONFIGURATOR = "mjaroslav.mcmods.peatized.common.CommonConfigurator";
+//    public static final String SERVER_CONFIGURATOR = "mjaroslav.mcmods.peatized.server.ServerConfigurator";
+
     private static final String UNLOCALIZED_NAME = MOD_ID + ".%s";
 
     public static String unlocalizedName(String name) {
